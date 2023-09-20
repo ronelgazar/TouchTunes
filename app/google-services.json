@@ -1,0 +1,121 @@
+{
+  "project_info": {
+    "project_number": "81356253206",
+    "project_id": "seniorproj-8f7de",
+    "storage_bucket": "seniorproj-8f7de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81356253206:android:2b0e7889bb54183aa12d37",
+        "android_client_info": {
+          "package_name": "com.example.seniorproj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81356253206-apel1ms0cq8l66hbhd96j7k2fgs41inv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.seniorproj",
+            "certificate_hash": "d118eeadb378dd1aa464ea66ec0c4ba98375655a"
+          }
+        },
+        {
+          "client_id": "81356253206-bog492jra4r5cqvgfg1u8clbuh8gg0ej.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.seniorproj",
+            "certificate_hash": "22b94955b9c6fa4a6f601866768a3dc25e289fdb"
+          }
+        },
+        {
+          "client_id": "81356253206-le1r3frtlhv6vsrtk13m73bvm89fpi0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB418X0YVznfFF2g5HP4lB2F0ctiHt4yuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81356253206-le1r3frtlhv6vsrtk13m73bvm89fpi0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81356253206:android:dd58a2db4d498a35a12d37",
+        "android_client_info": {
+          "package_name": "com.ronelgazar.seniorprojectmusicplayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81356253206-u9dht4mor30upgsfplifn4oqder7dldm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ronelgazar.seniorprojectmusicplayer",
+            "certificate_hash": "fe0043fc9b53ec2b0a336d980b12a1deae011812"
+          }
+        },
+        {
+          "client_id": "81356253206-le1r3frtlhv6vsrtk13m73bvm89fpi0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB418X0YVznfFF2g5HP4lB2F0ctiHt4yuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81356253206-le1r3frtlhv6vsrtk13m73bvm89fpi0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81356253206:android:635eb0e1e742d1caa12d37",
+        "android_client_info": {
+          "package_name": "com.ronelgazar.touchtunes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81356253206-le1r3frtlhv6vsrtk13m73bvm89fpi0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB418X0YVznfFF2g5HP4lB2F0ctiHt4yuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81356253206-le1r3frtlhv6vsrtk13m73bvm89fpi0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
