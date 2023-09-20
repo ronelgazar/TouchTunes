@@ -19,22 +19,16 @@ Blind and low functioning autistic children often have difficulty interacting wi
 Touch Tunes includes a variety of features that are designed to appeal to blind and low functioning autistic children. These features include:
 
 - A simple and intuitive interface that is easy to use for children of all abilities
-- A variety of musical instruments that children can play using simple gestures
-- A variety of songs that children can listen to and sing along to
-- A variety of interactive games that help children learn about music and explore their creativity
+- A variety of songs that children can listen to and play along.
+- A variety of modes to customize the experience. 
 
 **Benefits**
 
 Touch Tunes can provide a number of benefits for blind and low functioning autistic children. These benefits include:
 
-- Helping children to learn about music and explore their creativity
+- Helping children to listen and play with music and make music interactive
 - Helping children to develop their fine motor skills
-- Helping children to improve their communication skills
 - Providing children with a fun and engaging way to interact with technology
-
-**Usage**
-
-To use Touch Tunes, children simply need to tap on the screen to play the different instruments and songs. The app also includes a variety of interactive games that children can play by tapping on the screen or swiping their fingers.
 
 **Conclusion**
 
