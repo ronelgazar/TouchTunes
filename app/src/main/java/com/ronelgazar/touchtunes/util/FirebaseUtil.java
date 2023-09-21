@@ -11,7 +11,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ronelgazar.touchtunes.activity.MainActivity;
 import com.ronelgazar.touchtunes.model.Patient;
+
+import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +31,22 @@ public class FirebaseUtil {
         return firebaseDatabase.getReference(collectionPath);
     }
 
-    public void loginWithGmail(String email, String password) {
+/*    public void loginWithGmail(String email, String password, Context context) {
         AuthCredential credential = GoogleAuthProvider.getCredential(email, password);
         FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             // The user is logged in
+                            Intent intent = new Intent(context, MainActivity.class);
+                            context.startActivity(intent);
                         } else {
                             // An error occurred
                         }
                     }
                 });
-    }
+    }*/
 
     public void loginWithEmailAndPassword(String email, String password) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)

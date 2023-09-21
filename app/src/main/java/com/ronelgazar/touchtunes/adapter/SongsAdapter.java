@@ -44,7 +44,7 @@ public class SongsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.song_item, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.song_item, parent, false); //! CHECK
         }
 
         Song song = songs.get(position);

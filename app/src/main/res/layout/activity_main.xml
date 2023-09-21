@@ -24,8 +24,6 @@
             android:layout_height="match_parent"
             app:columnCount="2"
             app:orientation="vertical">
-
-
         </androidx.gridlayout.widget.GridLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
