@@ -15,16 +15,18 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:title="Touch tunes" />
+            app:title="Touch tunes"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/songs_grid_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:columnCount="2"
-            app:orientation="vertical">
-        </androidx.gridlayout.widget.GridLayout>
+            app:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
