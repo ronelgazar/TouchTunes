@@ -1,22 +1,51 @@
 package com.ronelgazar.touchtunes.model;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
-public class Patient {
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import android.util.Log;
+
+public class Patient  implements Serializable {
+
+    private String uid;
     private boolean isActive;
     private Mode mode;
     private String name;
-    private List<Song> playlist;
+    private Playlist playlist;
 
     public Patient() {
     }
 
-    public Patient(boolean isActive, Mode mode, String name, List<Song> playlist) {
+    public Patient(String uid, boolean isActive, Mode mode, String name, DocumentReference playlist) {
+        this.uid = uid;
         this.isActive = isActive;
         this.mode = mode;
         this.name = name;
-        this.playlist = playlist;
+        this.playlist = new Playlist(playlist);
+    }
+
+    // create a constructor that accepts a document or documentReference as needed
+    // and populate the fields
+    public Patient(Map<String, Object> patientData) {
+        if (patientData != null) {
+            uid = (String) patientData.get("uid");
+            isActive = (boolean) patientData.get("isActive");
+            mode = new Mode((DocumentReference) patientData.get("mode"));
+            name = (String) patientData.get("name");
+            playlist = new Playlist((DocumentReference) patientData.get("playlist"));
+        }
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public boolean isActive() {
@@ -43,11 +72,18 @@ public class Patient {
         this.name = name;
     }
 
-    public List<Song> getPlaylist() {
+    public Playlist getPlaylist() {
         return playlist;
     }
 
-    public void setPlaylist(List<Song> playlist) {
-        this.playlist = playlist;
+
+    public void printPatient() {
+        Log.d("Patient", "Patient uid: " + uid);
+        Log.d("Patient", "Patient isActive: " + isActive);
+        Log.d("Patient", "Patient mode: " + mode);
+        Log.d("Patient", "Patient name: " + name);
+        Log.d("Patient", "Patient playlist: " + playlist);
     }
+
+
 }

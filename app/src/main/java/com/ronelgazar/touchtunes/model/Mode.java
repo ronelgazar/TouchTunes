@@ -2,10 +2,15 @@ package com.ronelgazar.touchtunes.model;
 
 import java.util.Map;
 
+import com.google.firebase.firestore.DocumentReference;
+
+import android.util.Log;
+
 public class Mode {
 
     private String name;
     private Map<String, String> settings;
+    private DocumentReference documentReference;
 
     public Mode() {
     }
@@ -13,6 +18,22 @@ public class Mode {
     public Mode(String name, Map<String, String> settings) {
         this.name = name;
         this.settings = settings;
+    }
+
+    public Mode(DocumentReference documentReference) {
+        this.documentReference = documentReference;
+        // get the name and settings from the documentReference
+        if (documentReference !=null)
+        {
+            name = documentReference.getId();
+            settings = (Map<String, String>) documentReference.get();
+            Log.d("Mode", "Mode name: " + name);
+            Log.d("Mode", "Mode settings: " + settings);
+        }
+        else
+        {
+            Log.d("Mode", "Mode documentReference is null");
+        }
     }
 
     public String getName() {

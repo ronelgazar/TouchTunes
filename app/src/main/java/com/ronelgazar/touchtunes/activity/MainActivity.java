@@ -1,5 +1,6 @@
 package com.ronelgazar.touchtunes.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.ronelgazar.touchtunes.R;
+import com.ronelgazar.touchtunes.model.Patient;
 import com.ronelgazar.touchtunes.model.Song;
 
 import java.util.ArrayList;
@@ -27,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
     private ImageButton playButton, stopButton, skipButton, previousButton;
-    private List<Song> songs = new ArrayList<>();
+    private Patient patient;
     private Song currentSong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Intent intent = getIntent();
+        this.patient = (Patient) intent.getSerializableExtra("patient");
+        this.patient.printPatient();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         toolbar = findViewById(R.id.toolbar);
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         stopButton = findViewById(R.id.stopButton);
         skipButton = findViewById(R.id.skipButton);
         previousButton = findViewById(R.id.prevButton);
-
+        currentSong = patient.getPlaylist().getPlayList().get(0);
         // Implement the navigation menu logic
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Implement logic to skip to the next song
                 // Update the toolbar title with the new song title
+                
             }
         });
 

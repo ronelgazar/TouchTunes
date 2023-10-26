@@ -2,6 +2,7 @@ package com.ronelgazar.touchtunes.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -20,7 +21,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ronelgazar.touchtunes.R;
+import com.ronelgazar.touchtunes.model.Patient;
+import com.ronelgazar.touchtunes.util.FirebaseUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,11 +33,13 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> signInLauncher;
     private List<AuthUI.IdpConfig> providers;
     private Intent signInIntent;
+    private FirebaseUtil firebaseUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        firebaseUtil = new FirebaseUtil();
 
         // Set the authentication providers.
         providers = Arrays.asList(
@@ -61,10 +67,17 @@ public class LoginActivity extends AppCompatActivity {
             // The user signed in successfully.
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                // Go to the MainActivity.
-                Intent mainActivityIntent = new Intent(this, MainActivity.class);
-                startActivity(mainActivityIntent);
+                Log.d("USER",user.getUid());
+                firebaseUtil.getPatient("PcMKRYVsVqPVdyb6uXLT");
+         
+         
+                // Patient patient = firebaseUtil.getPatient("PcMKRYVsVqPVdyb6uXLT");
+
+                // Intent mainActivityIntent = new Intent(this, MainActivity.class);
+                // mainActivityIntent.putExtra("patient", patient);
+                // startActivity(mainActivityIntent);
                 finish();
+
             } else {
                 // Show an error toast.
                 Toast.makeText(this, "Failed to get user information", Toast.LENGTH_SHORT).show();
@@ -78,13 +91,13 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
                 return;
             }
-    
+
             if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
-    
+
             Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
             finish();
         }

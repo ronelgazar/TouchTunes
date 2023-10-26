@@ -2,12 +2,14 @@ package com.ronelgazar.touchtunes.model;
 
 import android.media.MediaPlayer;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import java.io.IOException;
 public class Song {
 
     private String title;
     private String url;
     private MediaPlayer mediaPlayer;
+
 
     public Song() {
     }
@@ -45,7 +47,8 @@ public class Song {
             mediaPlayer.start();
         } catch (IOException e) {
             Log.e("Song", "Failed to play song", e);
-//            Toast.makeText(MainActivity.this, "Failed to play song", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(MainActivity.this, "Failed to play song",
+            // Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -56,4 +59,6 @@ public class Song {
             mediaPlayer = null;
         }
     }
+
+    
 }
