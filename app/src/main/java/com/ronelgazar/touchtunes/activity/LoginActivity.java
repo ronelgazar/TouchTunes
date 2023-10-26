@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
@@ -25,84 +26,67 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 123;
-    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
-    );
+    private ActivityResultLauncher<Intent> signInLauncher;
+    private List<AuthUI.IdpConfig> providers;
+    private Intent signInIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        createSignInIntent();
 
-    }
-
-    public void createSignInIntent() {
-        // [START auth_fui_create_intent]
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
+        // Set the authentication providers.
+        providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.TwitterBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        // Create and launch sign-in intent
-        Intent signInIntent = AuthUI.getInstance()
+        // Create the sign-in intent.
+        signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build();
+
+        // Set up the sign-in launcher.
+        signInLauncher = registerForActivityResult(
+                new FirebaseAuthUIActivityResultContract(),
+                this::onSignInResult);
+
+        // Start the sign-in flow.
         signInLauncher.launch(signInIntent);
-        // [END auth_fui_create_intent]
     }
 
-    // [START auth_fui_result]
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
-            // Successfully signed in
+            // The user signed in successfully.
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Toast.makeText(this, "Signed in", Toast.LENGTH_SHORT).show();
-            // ...
+            if (user != null) {
+                // Go to the MainActivity.
+                Intent mainActivityIntent = new Intent(this, MainActivity.class);
+                startActivity(mainActivityIntent);
+                finish();
+            } else {
+                // Show an error toast.
+                Toast.makeText(this, "Failed to get user information", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            // ...
-
-
+            // The sign-in process failed.
+            if (response == null) {
+                // User pressed back button
+                Toast.makeText(this, "Sign-in cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+    
+            if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+    
+            Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
+            finish();
         }
-    }
-    // [END auth_fui_result]
-
-    public void signOut() {
-        // [START auth_fui_signout]
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_signout]
-    }
-
-    public void delete() {
-        // [START auth_fui_delete]
-        AuthUI.getInstance()
-                .delete(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
-        // [END auth_fui_delete]
     }
 }
