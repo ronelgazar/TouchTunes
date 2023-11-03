@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.ronelgazar.touchtunes.R;
 import com.ronelgazar.touchtunes.model.Patient;
 import com.ronelgazar.touchtunes.util.FirebaseUtil;
@@ -27,6 +28,7 @@ import com.ronelgazar.touchtunes.util.FirebaseUtil;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -67,17 +69,21 @@ public class LoginActivity extends AppCompatActivity {
             // The user signed in successfully.
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                Log.d("USER",user.getUid());
-                firebaseUtil.getPatient("PcMKRYVsVqPVdyb6uXLT");
-         
-         
-                // Patient patient = firebaseUtil.getPatient("PcMKRYVsVqPVdyb6uXLT");
-
-                // Intent mainActivityIntent = new Intent(this, MainActivity.class);
-                // mainActivityIntent.putExtra("patient", patient);
-                // startActivity(mainActivityIntent);
-                finish();
-
+                Log.d("USER", user.getUid());
+                firebaseUtil.getPatient(user.getUid(), patientData -> {
+                    if (patientData != null) {
+                        Patient patient = new Patient(patientData);
+                        patient.setUid(user.getUid());
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra("patient", patient);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Show an error toast.
+                        Toast.makeText(this, "Failed to get patient information", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             } else {
                 // Show an error toast.
                 Toast.makeText(this, "Failed to get user information", Toast.LENGTH_SHORT).show();

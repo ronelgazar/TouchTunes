@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        this.patient = (Patient) intent.getSerializableExtra("patient");
-        this.patient.printPatient();
+        Patient patient = intent.getParcelableExtra("patient");
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         toolbar = findViewById(R.id.toolbar);
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         stopButton = findViewById(R.id.stopButton);
         skipButton = findViewById(R.id.skipButton);
         previousButton = findViewById(R.id.prevButton);
-        currentSong = patient.getPlaylist().getPlayList().get(0);
+        currentSong = new Song("aaaa", "https://firebasestorage.googleapis.com/v0/b/seniorproj-8f7de.appspot.com/o/01%20%D7%A8%D7%A6%D7%95%D7%A2%D7%94%201.mp3?alt=media&token=3ea70338-95ac-475d-9e34-a1137a1e51bb&_gl=1*1frugqh*_ga*MTM4NTU3OTIwMS4xNjk3MDI4OTE5*_ga_CW55HF8NVT*MTY5ODczNTUxNS45NS4xLjE2OTg3MzY5MjAuNDQuMC4w");
         // Implement the navigation menu logic
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -81,17 +80,14 @@ public class MainActivity extends AppCompatActivity {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement logic to skip to the next song
-                // Update the toolbar title with the new song title
-                
+                patient.getPlaylist().skipSong();
             }
         });
 
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement logic to go to the previous song
-                // Update the toolbar title with the new song title
+                patient.getPlaylist().prevSong();
             }
         });
     }

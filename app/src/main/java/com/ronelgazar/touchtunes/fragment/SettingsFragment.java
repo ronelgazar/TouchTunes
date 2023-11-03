@@ -38,12 +38,12 @@ public class SettingsFragment extends Fragment {
         vibrationSpinner = view.findViewById(R.id.vibration_spinner);
 
         // Update the UI elements to reflect the current settings values.
-        interactionDurationSpinner.setSelection(Integer.parseInt(settings.getInteractionDuration()));
+        interactionDurationSpinner.setSelection(settings.getInteractionDuration());
         interactionTypeSpinner.setSelection(Integer.parseInt(settings.getInteractionType()));
-        lightingSpinner.setSelection(Integer.parseInt(settings.getLighting()));
+        lightingSpinner.setSelection(settings.getLighting());
         sessionDurationSpinner.setSelection(Integer.parseInt(settings.getSessionDuration()));
-        soundInteractionSpinner.setSelection(Integer.parseInt(settings.getSoundInteraction()));
-        vibrationSpinner.setSelection(Integer.parseInt(settings.getVibration()));
+        soundInteractionSpinner.setSelection(settings.getSoundInteraction() ? 1 : 0);
+        vibrationSpinner.setSelection(settings.getVibration());
 
         // Add listeners to the UI elements to handle changes to the settings values.
         interactionDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
