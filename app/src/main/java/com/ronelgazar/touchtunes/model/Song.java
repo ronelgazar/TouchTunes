@@ -76,7 +76,6 @@ public class Song implements Parcelable  {
     }
 
 
-
     public void playSong() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
@@ -113,6 +112,11 @@ public class Song implements Parcelable  {
         if (mediaPlayer != null) {
             mediaPlayer.start();
         }
+    }
+
+    public void printSong() {
+        Log.d("Song", "Song title: " + title);
+        Log.d("Song", "Song url: " + url);
     }
     
 }

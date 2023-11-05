@@ -21,7 +21,6 @@ public class Patient implements Parcelable {
     private Playlist playlist;
     private static FirebaseUtil firebaseUtil = new FirebaseUtil();
 
-
     public Patient() {
     }
 
@@ -96,8 +95,8 @@ public class Patient implements Parcelable {
             firebaseUtil.getDocRefData(modeRef, new FirebaseUtil.DataCallback() {
                 @Override
                 public void onCallback(Map<String, Object> data) {
-                    Log.d("Patient", "Mode data: " + data);
                     mode = new Mode(data);
+
                 }
             });
         }
@@ -106,21 +105,12 @@ public class Patient implements Parcelable {
             firebaseUtil.getDocRefData(playlistRef, new FirebaseUtil.DataCallback() {
                 @Override
                 public void onCallback(Map<String, Object> data) {
-                    if (data != null) {
-                        Log.d("Patient", "Playlist data: " + data);
-                        playlist = new Playlist(data);
-                    } else {
-                        Log.d("Patient", "Data is null");
-                    }
+                    Log.d("Patient", "Playlist data: " + data);
+                    playlist = new Playlist(data);
                 }
             });
         }
     }
-
-
-    
-    
-
 
     public String getUid() {
         return uid;
@@ -162,7 +152,7 @@ public class Patient implements Parcelable {
         Log.d("Patient", "Patient uid: " + uid);
         Log.d("Patient", "Patient isActive: " + isActive);
         Log.d("Patient", "Patient name: " + name);
-//        playlist.printPlaylist();
+        // playlist.printPlaylist();
     }
 
     @Override
@@ -177,6 +167,5 @@ public class Patient implements Parcelable {
         dest.writeString(name);
         dest.writeParcelable(mode, flags);
     }
-
 
 }

@@ -17,8 +17,35 @@ import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import android.util.Log;
 
-public class Playlist {
+public class Playlist implements Parcelable {
     List<Song> playList = new ArrayList<>();
+
+
+    protected Playlist(Parcel in) {
+        playList = in.createTypedArrayList(Song.CREATOR);
+    }
+
+    public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
+        @Override
+        public Playlist createFromParcel(Parcel in) {
+            return new Playlist(in);
+        }
+
+        @Override
+        public Playlist[] newArray(int size) {
+            return new Playlist[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(playList);
+    }
 
     public Playlist() {
 
@@ -32,11 +59,15 @@ public class Playlist {
         List<Map<String, Object>> songsMapList = (List<Map<String, Object>>) playlist.get("songs");
         List<Song> songs = new ArrayList<>();
         for (Map<String, Object> songMap : songsMapList) {
-            String url = (String) songMap.get("url");
+            String url = (String) songMap.get("URL");
             String name = (String) songMap.get("name");
-            songs.add(new Song(url, name));
+            Song song = new Song(name, url);
+            songs.add(song);
+            song.printSong();
         }
+
         this.playList = songs;
+
     }
 
     public Playlist(DocumentReference documentReference, FirebaseUtil.DataCallback callback) {
