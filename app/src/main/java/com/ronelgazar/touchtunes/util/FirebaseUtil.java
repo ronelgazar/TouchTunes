@@ -7,6 +7,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.MemoryCacheSettings;
+import com.google.firebase.firestore.PersistentCacheSettings;
 import com.google.firebase.firestore.SetOptions;
 import com.ronelgazar.touchtunes.model.Patient;
 
@@ -24,11 +27,28 @@ public class FirebaseUtil {
         void onCallback(Map<String, Object> data);
     }
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
+
+    private FirebaseFirestoreSettings settings ;
 
 
-    public FirebaseFirestore getDb()
-    {
+    public FirebaseUtil() {
+        settings = 
+        new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
+            // Use memory-only cache
+            .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
+            // Use persistent disk cache (default)
+            .setLocalCacheSettings(PersistentCacheSettings.newBuilder()
+                                    .build())
+
+            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+            .build();
+
+        db = FirebaseFirestore.getInstance();
+        db.setFirestoreSettings(settings);
+    }
+
+    public FirebaseFirestore getDb() {
         return db;
     }
 
@@ -39,8 +59,6 @@ public class FirebaseUtil {
             return (T) bundle.getParcelable(key);
         }
     }
-    
-
 
     public void createPatient(Patient patient) {
         db.collection("Patients").document(patient.getUid()).set(patient);
@@ -55,13 +73,13 @@ public class FirebaseUtil {
             return patient;
         });
 
-
     }
 
     public void updatePatient(Patient patient) {
         DocumentReference docRef = db.collection("Patients").document(patient.getUid());
         docRef.set(patient, SetOptions.merge());
     }
+
     public CompletableFuture<Map<String, Object>> getDocRefData(DocumentReference docRef) {
         CompletableFuture<Map<String, Object>> completableFuture = new CompletableFuture<>();
 
@@ -81,9 +99,5 @@ public class FirebaseUtil {
 
         return completableFuture;
     }
-
-
-    
-
 
 }
