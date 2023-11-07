@@ -60,30 +60,6 @@ public class Mode implements Parcelable {
         this.settings = (Map<String, Object>) mode.get("settings");
     }
 
-
-    public Mode(DocumentReference documentReference, FirebaseUtil.DataCallback callback) {
-        this.documentReference = documentReference;
-        if (documentReference != null) {
-            FirebaseUtil firebaseUtil = new FirebaseUtil();
-            firebaseUtil.getDocRefData(documentReference, new FirebaseUtil.DataCallback() {
-                @Override
-                public void onCallback(Map<String, Object> data) {
-                    if (data != null) {
-                        name = (String) data.get("name");
-                        settings = (Map<String, Object>) data.get("settings");
-                        callback.onCallback(data);
-                        Log.d("Mode", "Mode name: " + name);
-                        Log.d("Mode", "Mode settings: " + settings);
-                    } else {
-                        Log.d("Mode", "No such document");
-                    }
-                }
-            });
-        } else {
-            Log.d("Mode", "Mode documentReference is null");
-        }
-    }
-
     public String getName() {
         return name;
     }

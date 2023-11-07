@@ -7,9 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.ronelgazar.touchtunes.model.Mode;
 
@@ -23,6 +26,7 @@ public class SettingsFragment extends Fragment {
     private Spinner sessionDurationSpinner;
     private Spinner soundInteractionSpinner;
     private Spinner vibrationSpinner;
+    private Button popOutButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,7 +40,7 @@ public class SettingsFragment extends Fragment {
         sessionDurationSpinner = view.findViewById(R.id.session_duration_spinner);
         soundInteractionSpinner = view.findViewById(R.id.sound_interaction_spinner);
         vibrationSpinner = view.findViewById(R.id.vibration_spinner);
-
+        popOutButton = view.findViewById(R.id.pop_out_button);
         // Update the UI elements to reflect the current settings values.
         interactionDurationSpinner.setSelection(settings.getInteractionDuration());
         interactionTypeSpinner.setSelection(Integer.parseInt(settings.getInteractionType()));
@@ -54,6 +58,15 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        popOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.remove(SettingsFragment.this);
+                fragmentTransaction.commit();
             }
         });
 

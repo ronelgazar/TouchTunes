@@ -4,28 +4,19 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.ronelgazar.touchtunes.activity.MainActivity;
-import com.ronelgazar.touchtunes.model.Mode;
 import com.ronelgazar.touchtunes.model.Patient;
-import com.ronelgazar.touchtunes.model.Song;
 
-import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class FirebaseUtil {
 
@@ -41,32 +32,58 @@ public class FirebaseUtil {
         return db;
     }
 
+    public static <T extends Parcelable> T getParcelableCompat(Bundle bundle, String key, Class<T> clazz) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return bundle.getParcelable(key, clazz);
+        } else {
+            return (T) bundle.getParcelable(key);
+        }
+    }
+    
+
 
     public void createPatient(Patient patient) {
         db.collection("Patients").document(patient.getUid()).set(patient);
     }
 
-    public void getPatient(String uid, DataCallback callback) {
+    public CompletableFuture<Patient> getPatient(String uid) {
         DocumentReference docRef = db.collection("Patients").document(uid);
-        getDocRefData(docRef, callback);
+        getDocRefData(docRef);
+
+        return getDocRefData(docRef).thenApply(data -> {
+            Patient patient = new Patient(data);
+            return patient;
+        });
+
+
     }
 
     public void updatePatient(Patient patient) {
         DocumentReference docRef = db.collection("Patients").document(patient.getUid());
         docRef.set(patient, SetOptions.merge());
     }
-    public void getDocRefData(DocumentReference docRef, DataCallback callback) {
+    public CompletableFuture<Map<String, Object>> getDocRefData(DocumentReference docRef) {
+        CompletableFuture<Map<String, Object>> completableFuture = new CompletableFuture<>();
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     Map<String, Object> data = task.getResult().getData();
                     Log.d("FirebaseUtil", "DocumentSnapshot data: " + data);
-                    callback.onCallback(data);
+                    completableFuture.complete(data);
                 } else {
                     Log.d("FirebaseUtil", "Error getting document", task.getException());
+                    completableFuture.completeExceptionally(task.getException());
                 }
             }
         });
+
+        return completableFuture;
     }
+
+
+    
+
+
 }

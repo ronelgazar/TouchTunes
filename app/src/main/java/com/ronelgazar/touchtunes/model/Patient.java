@@ -3,6 +3,7 @@ package com.ronelgazar.touchtunes.model;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,11 +26,11 @@ public class Patient implements Parcelable {
     }
 
     protected Patient(Parcel in) {
-        uid = in.readString();
-        isActive = in.readByte() != 0;
-        name = in.readString();
-        playlist = in.readParcelable(Playlist.class.getClassLoader());
-        mode = in.readParcelable(Mode.class.getClassLoader());
+        this.uid = in.readString();
+        this.isActive = in.readByte() != 0;
+        this.name = in.readString();
+        this.mode = in.readParcelable(Mode.class.getClassLoader());
+        this.playlist = in.readParcelable(Playlist.class.getClassLoader());
     }
 
     public static final Creator<Patient> CREATOR = new Creator<Patient>() {
@@ -52,65 +53,29 @@ public class Patient implements Parcelable {
         this.playlist = playlist;
     }
 
-    public Patient(DocumentReference documentReference, FirebaseUtil.DataCallback callback) {
-        if (documentReference != null) {
-            firebaseUtil.getDocRefData(documentReference, new FirebaseUtil.DataCallback() {
-                @Override
-                public void onCallback(Map<String, Object> data) {
-                    if (data != null) {
-                        isActive = (Boolean) data.get("isActive");
-                        DocumentReference modeRef = (DocumentReference) data.get("mode");
-                        if (modeRef != null) {
-                            firebaseUtil.getDocRefData(modeRef, new FirebaseUtil.DataCallback() {
-                                @Override
-                                public void onCallback(Map<String, Object> data) {
-                                    mode = new Mode(data);
-                                }
-                            });
-                        }
-                        name = (String) data.get("name");
-                        DocumentReference playlistRef = (DocumentReference) data.get("playlist");
-                        if (playlistRef != null) {
-                            firebaseUtil.getDocRefData(playlistRef, new FirebaseUtil.DataCallback() {
-                                @Override
-                                public void onCallback(Map<String, Object> data) {
-                                    playlist = new Playlist(data);
-                                }
-                            });
-                        }
-                    } else {
-                        Log.d("Patient", "No such document");
-                    }
-                }
-            });
-        }
+    public Patient(Object data) {
+        Map<String, Object> dataMap = (Map<String, Object>) data;
+
+        this.uid = (String) dataMap.get("uid");
+        this.isActive = (Boolean) dataMap.get("isActive");
+        this.name = (String) dataMap.get("name");
+        DocumentReference playlistRef = (DocumentReference) dataMap.get("playlist");
+        DocumentReference modeRef = (DocumentReference) dataMap.get("mode");
+        CompletableFuture playlistFuture = firebaseUtil.getDocRefData(playlistRef);
+        CompletableFuture modeFuture = firebaseUtil.getDocRefData(modeRef);
+        // Wait for both the playlist and mode data to be fetched before creating the Patient object.
+        CompletableFuture.allOf(playlistFuture, modeFuture).thenAcceptAsync(v -> {
+            this.uid = (String) dataMap.get("uid");
+            this.isActive = (Boolean) dataMap.get("isActive");
+            this.name = (String) dataMap.get("name");
+            this.playlist = (Playlist) playlistFuture.getNow(null);
+            this.mode = (Mode) modeFuture.getNow(null);
+        });
+
+
     }
 
-    public Patient(Map<String, Object> data) {
-        this.uid = (String) data.get("uid");
-        this.isActive = (Boolean) data.get("isActive");
-        this.name = (String) data.get("name");
-        DocumentReference modeRef = (DocumentReference) data.get("mode");
-        if (modeRef != null) {
-            firebaseUtil.getDocRefData(modeRef, new FirebaseUtil.DataCallback() {
-                @Override
-                public void onCallback(Map<String, Object> data) {
-                    mode = new Mode(data);
 
-                }
-            });
-        }
-        DocumentReference playlistRef = (DocumentReference) data.get("playlist");
-        if (playlistRef != null) {
-            firebaseUtil.getDocRefData(playlistRef, new FirebaseUtil.DataCallback() {
-                @Override
-                public void onCallback(Map<String, Object> data) {
-                    Log.d("Patient", "Playlist data: " + data);
-                    playlist = new Playlist(data);
-                }
-            });
-        }
-    }
 
     public String getUid() {
         return uid;
@@ -120,10 +85,14 @@ public class Patient implements Parcelable {
         this.uid = uid;
     }
 
+
     public boolean isActive() {
         return isActive;
     }
 
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+    }
     public void setActive(boolean active) {
         isActive = active;
     }
@@ -145,14 +114,15 @@ public class Patient implements Parcelable {
     }
 
     public Playlist getPlaylist() {
-        return playlist;
+        return this.playlist;
     }
 
     public void printPatient() {
-        Log.d("Patient", "Patient uid: " + uid);
-        Log.d("Patient", "Patient isActive: " + isActive);
-        Log.d("Patient", "Patient name: " + name);
-        // playlist.printPlaylist();
+        Log.d("AAAAAAA", "Patient uid: " + uid);
+        Log.d("AAAAAAA", "Patient isActive: " + isActive);
+        Log.d("AAAAAAAAAA", "Patient name: " + name);
+
+        //mode.printMode();
     }
 
     @Override
@@ -166,6 +136,7 @@ public class Patient implements Parcelable {
         dest.writeByte((byte) (isActive ? 1 : 0));
         dest.writeString(name);
         dest.writeParcelable(mode, flags);
+        dest.writeParcelable(playlist, flags);
     }
 
 }

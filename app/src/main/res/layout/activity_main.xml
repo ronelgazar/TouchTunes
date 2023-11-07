@@ -2,6 +2,7 @@
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -64,7 +65,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stopButton"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/ic_prev" />
+                android:src="@drawable/ic_skip"
+                 />
 
             <ImageButton
                 android:id="@+id/skipButton"
@@ -74,7 +76,22 @@
                 app:layout_constraintEnd_toStartOf="@+id/prevButton"
                 app:layout_constraintTop_toBottomOf="@+id/playButton"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/ic_skip" />
+                android:src="@drawable/ic_prev"/>
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,5 +101,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@layout/side_menu" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

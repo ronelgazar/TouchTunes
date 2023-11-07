@@ -1,18 +1,24 @@
 package com.ronelgazar.touchtunes.model;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.IOException;
 public class Song implements Parcelable  {
 
     private String title;
     private String url;
-    private MediaPlayer mediaPlayer;
-
-
+    private static MediaPlayer mediaPlayer;
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     public Song() {
     }
 
@@ -77,6 +83,9 @@ public class Song implements Parcelable  {
 
 
     public void playSong() {
+        //TODO  Get a reference to the file in Firebase Storage.
+
+
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }

@@ -25,6 +25,7 @@ public class Playlist implements Parcelable {
         playList = in.createTypedArrayList(Song.CREATOR);
     }
 
+
     public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
         @Override
         public Playlist createFromParcel(Parcel in) {
@@ -47,8 +48,8 @@ public class Playlist implements Parcelable {
         dest.writeTypedList(playList);
     }
 
-    public Playlist() {
-
+    public Playlist(Playlist playlist) {
+        this.playList = playlist.getPlayList();
     }
 
     public Playlist(List<Song> playList) {
@@ -67,31 +68,8 @@ public class Playlist implements Parcelable {
         }
 
         this.playList = songs;
+        printPlaylist();
 
-    }
-
-    public Playlist(DocumentReference documentReference, FirebaseUtil.DataCallback callback) {
-        if (documentReference != null) {
-            FirebaseUtil firebaseUtil = new FirebaseUtil();
-            firebaseUtil.getDocRefData(documentReference, new FirebaseUtil.DataCallback() {
-                @Override
-                public void onCallback(Map<String, Object> data) {
-                    if (data != null) {
-                        List<Map<String, Object>> songs = (List<Map<String, Object>>) data.get("songs");
-                        for (Map<String, Object> songData : songs) {
-                            String title = (String) songData.get("name");
-                            String url = (String) songData.get("url");
-                            Song song = new Song(title, url);
-                            // add the song to the list
-                            playList.add(song);
-                        }
-                        callback.onCallback(data);
-                    } else {
-                        Log.d("Song", "No such document");
-                    }
-                }
-            });
-        }
     }
 
     public List<Song> getPlayList() {
@@ -135,13 +113,17 @@ public class Playlist implements Parcelable {
         return null;
     }
 
-    public void skipSong() {
+    public void skipSong(Song song) {
         if (playList.size() > 0) {
-            Song currentSong = playList.get(0);
-            currentSong.stopSong();
-            playList.remove(0);
-            currentSong = playList.get(0);
-            currentSong.playSong();
+            int index = playList.indexOf(song);
+            if (index != -1) {
+                Song currentSong = playList.get(index);
+                currentSong.stopSong();
+                playList.remove(index);
+                playList.add(currentSong);
+                currentSong = playList.get(0);
+                currentSong.playSong();
+            }
         } else {
             Log.d("Playlist", "Playlist is empty");
         }
@@ -164,8 +146,8 @@ public class Playlist implements Parcelable {
 
     public void printPlaylist() {
         for (Song song : playList) {
-            Log.d("Patient", "Song title: " + song.getTitle());
-            Log.d("Patient", "Song url: " + song.getUrl());
+            Log.d("BBBBBBBBBB", "Song title: " + song.getTitle());
+            Log.d("BBBBBBBBBB", "Song url: " + song.getUrl());
         }
     }
 
