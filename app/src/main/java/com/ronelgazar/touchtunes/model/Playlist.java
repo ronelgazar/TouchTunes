@@ -3,28 +3,16 @@ package com.ronelgazar.touchtunes.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.play.core.integrity.e;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.model.Document;
-import com.ronelgazar.touchtunes.util.FirebaseUtil;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 import android.util.Log;
 
 public class Playlist implements Parcelable {
     List<Song> playList = new ArrayList<>();
 
-
     protected Playlist(Parcel in) {
         playList = in.createTypedArrayList(Song.CREATOR);
     }
-
 
     public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
         @Override

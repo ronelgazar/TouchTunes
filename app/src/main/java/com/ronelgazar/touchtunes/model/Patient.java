@@ -1,12 +1,9 @@
 package com.ronelgazar.touchtunes.model;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.ronelgazar.touchtunes.util.FirebaseUtil;
 
 import android.os.Parcel;
@@ -63,7 +60,8 @@ public class Patient implements Parcelable {
         DocumentReference modeRef = (DocumentReference) dataMap.get("mode");
         CompletableFuture playlistFuture = firebaseUtil.getDocRefData(playlistRef);
         CompletableFuture modeFuture = firebaseUtil.getDocRefData(modeRef);
-        // Wait for both the playlist and mode data to be fetched before creating the Patient object.
+        // Wait for both the playlist and mode data to be fetched before creating the
+        // Patient object.
         CompletableFuture.allOf(playlistFuture, modeFuture).thenAcceptAsync(v -> {
             this.uid = (String) dataMap.get("uid");
             this.isActive = (Boolean) dataMap.get("isActive");
@@ -72,10 +70,7 @@ public class Patient implements Parcelable {
             this.mode = (Mode) modeFuture.getNow(null);
         });
 
-
     }
-
-
 
     public String getUid() {
         return uid;
@@ -85,7 +80,6 @@ public class Patient implements Parcelable {
         this.uid = uid;
     }
 
-
     public boolean isActive() {
         return isActive;
     }
@@ -93,6 +87,7 @@ public class Patient implements Parcelable {
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
     }
+
     public void setActive(boolean active) {
         isActive = active;
     }
@@ -122,7 +117,7 @@ public class Patient implements Parcelable {
         Log.d("AAAAAAA", "Patient isActive: " + isActive);
         Log.d("AAAAAAAAAA", "Patient name: " + name);
 
-        //mode.printMode();
+        // mode.printMode();
     }
 
     @Override

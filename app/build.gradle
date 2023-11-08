@@ -9,17 +9,18 @@ android {
 
     defaultConfig {
         applicationId "com.ronelgazar.touchtunes"
-        minSdk 24
+        minSdk 19
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
