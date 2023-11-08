@@ -22,6 +22,9 @@ public class Patient implements Parcelable {
     private Playlist playlist;
     private static FirebaseUtil firebaseUtil = new FirebaseUtil();
 
+
+    CompletableFuture modeFuture;
+    CompletableFuture playlistFuture;
     public Patient() {
     }
 
@@ -61,8 +64,8 @@ public class Patient implements Parcelable {
         this.name = (String) dataMap.get("name");
         DocumentReference playlistRef = (DocumentReference) dataMap.get("playlist");
         DocumentReference modeRef = (DocumentReference) dataMap.get("mode");
-        CompletableFuture playlistFuture = firebaseUtil.getDocRefData(playlistRef);
-        CompletableFuture modeFuture = firebaseUtil.getDocRefData(modeRef);
+        playlistFuture = firebaseUtil.getDocRefData(playlistRef);
+        modeFuture= firebaseUtil.getDocRefData(modeRef);
         // Wait for both the playlist and mode data to be fetched before creating the Patient object.
         CompletableFuture.allOf(playlistFuture, modeFuture).thenAcceptAsync(v -> {
             this.uid = (String) dataMap.get("uid");
@@ -75,6 +78,15 @@ public class Patient implements Parcelable {
 
     }
 
+    public void init() {
+        CompletableFuture<Void> allFuturesCompleted = CompletableFuture.allOf(playlistFuture, modeFuture);
+
+        allFuturesCompleted.thenAcceptAsync(v -> {
+            this.playlist = (Playlist) playlistFuture.getNow(null);
+            this.mode = (Mode) modeFuture.getNow(null);
+        });
+
+    }
 
 
     public String getUid() {

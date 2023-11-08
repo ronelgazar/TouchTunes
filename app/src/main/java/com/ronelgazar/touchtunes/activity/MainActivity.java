@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
          Playlist playlist = new Playlist(songs);
          patient.setPlaylist(playlist);
-
         fragmentManager = getSupportFragmentManager();
 
         // Get the button that opens the SettingsFragment.

@@ -33,18 +33,18 @@ public class FirebaseUtil {
 
 
     public FirebaseUtil() {
-        settings = 
-        new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
-            // Use memory-only cache
-            .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
-            // Use persistent disk cache (default)
-            .setLocalCacheSettings(PersistentCacheSettings.newBuilder()
-                                    .build())
-
-            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-            .build();
 
         db = FirebaseFirestore.getInstance();
+        settings =
+                new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
+                        // Use memory-only cache
+                        .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
+                        // Use persistent disk cache (default)
+                        .setLocalCacheSettings(PersistentCacheSettings.newBuilder()
+                                .build())
+
+                        .build();
+
         db.setFirestoreSettings(settings);
     }
 
