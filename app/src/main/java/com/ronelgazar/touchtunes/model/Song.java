@@ -18,13 +18,12 @@ public class Song implements Parcelable  {
     private String title;
     private String url;
     private static MediaPlayer mediaPlayer;
-    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     public Song() {
     }
 
     protected Song(Parcel in) {
-        url = in.readString();
         title = in.readString();
+        url = in.readString();
     }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -46,8 +45,8 @@ public class Song implements Parcelable  {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
         dest.writeString(title);
+        dest.writeString(url);
     }
 
 

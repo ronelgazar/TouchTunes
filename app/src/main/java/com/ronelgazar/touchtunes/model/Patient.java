@@ -2,9 +2,16 @@ package com.ronelgazar.touchtunes.model;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.ronelgazar.touchtunes.util.DefualtData;
 import com.ronelgazar.touchtunes.util.FirebaseUtil;
+import com.ronelgazar.touchtunes.util.FirebaseUtil.DataCallback;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -19,15 +26,16 @@ public class Patient implements Parcelable {
     private Playlist playlist;
     private static FirebaseUtil firebaseUtil = new FirebaseUtil();
 
-    public Patient() {
-    }
+
+    DocumentReference playlistRef;
+    DocumentReference modeRef;
 
     protected Patient(Parcel in) {
+        this.playlist = in.readParcelable(Playlist.class.getClassLoader());
+        this.mode = in.readParcelable(Mode.class.getClassLoader());
         this.uid = in.readString();
         this.isActive = in.readByte() != 0;
         this.name = in.readString();
-        this.mode = in.readParcelable(Mode.class.getClassLoader());
-        this.playlist = in.readParcelable(Playlist.class.getClassLoader());
     }
 
     public static final Creator<Patient> CREATOR = new Creator<Patient>() {
@@ -42,34 +50,29 @@ public class Patient implements Parcelable {
         }
     };
 
-    public Patient(String uid, boolean isActive, Mode mode, String name, Playlist playlist) {
-        this.uid = uid;
-        this.isActive = isActive;
-        this.mode = mode;
-        this.name = name;
-        this.playlist = playlist;
-    }
-
     public Patient(Object data) {
         Map<String, Object> dataMap = (Map<String, Object>) data;
+
 
         this.uid = (String) dataMap.get("uid");
         this.isActive = (Boolean) dataMap.get("isActive");
         this.name = (String) dataMap.get("name");
-        DocumentReference playlistRef = (DocumentReference) dataMap.get("playlist");
-        DocumentReference modeRef = (DocumentReference) dataMap.get("mode");
-        CompletableFuture playlistFuture = firebaseUtil.getDocRefData(playlistRef);
-        CompletableFuture modeFuture = firebaseUtil.getDocRefData(modeRef);
-        // Wait for both the playlist and mode data to be fetched before creating the
-        // Patient object.
-        CompletableFuture.allOf(playlistFuture, modeFuture).thenAcceptAsync(v -> {
-            this.uid = (String) dataMap.get("uid");
-            this.isActive = (Boolean) dataMap.get("isActive");
-            this.name = (String) dataMap.get("name");
-            this.playlist = (Playlist) playlistFuture.getNow(null);
-            this.mode = (Mode) modeFuture.getNow(null);
-        });
+        this.modeRef = (DocumentReference) dataMap.get("mode");
+        this.playlistRef = (DocumentReference) dataMap.get("playlist");
 
+        firebaseUtil.getDocRefData(this.playlistRef, new DataCallback() {
+            @Override
+            public void onCallback(Map<String, Object> data) {
+                playlist = new Playlist(data);
+            }
+        });
+    
+        firebaseUtil.getDocRefData(this.modeRef, new DataCallback() {
+            @Override
+            public void onCallback(Map<String, Object> data) {
+                mode = new Mode(data);
+            }
+        });
     }
 
     public String getUid() {
@@ -127,11 +130,11 @@ public class Patient implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(playlist, flags);
+        dest.writeParcelable(mode, flags);
         dest.writeString(uid);
         dest.writeByte((byte) (isActive ? 1 : 0));
         dest.writeString(name);
-        dest.writeParcelable(mode, flags);
-        dest.writeParcelable(playlist, flags);
     }
 
 }
