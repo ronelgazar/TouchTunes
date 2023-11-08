@@ -1,9 +1,5 @@
 package com.ronelgazar.touchtunes.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -79,7 +75,6 @@ public class Patient implements Parcelable {
         });
     }
 
-
     public String getUid() {
         return uid;
     }
@@ -88,7 +83,6 @@ public class Patient implements Parcelable {
         this.uid = uid;
     }
 
-
     public boolean isActive() {
         return isActive;
     }
@@ -96,6 +90,7 @@ public class Patient implements Parcelable {
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
     }
+
     public void setActive(boolean active) {
         isActive = active;
     }
@@ -125,7 +120,7 @@ public class Patient implements Parcelable {
         Log.d("AAAAAAA", "Patient isActive: " + isActive);
         Log.d("AAAAAAAAAA", "Patient name: " + name);
 
-        //mode.printMode();
+        // mode.printMode();
     }
 
     @Override
