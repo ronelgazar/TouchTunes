@@ -66,8 +66,6 @@ public class FirebaseUtil {
 
     public CompletableFuture<Patient> getPatient(String uid) {
         DocumentReference docRef = db.collection("Patients").document(uid);
-        getDocRefData(docRef);
-
         return getDocRefData(docRef).thenApply(data -> {
             Patient patient = new Patient(data);
             return patient;
@@ -83,21 +81,20 @@ public class FirebaseUtil {
     public CompletableFuture<Map<String, Object>> getDocRefData(DocumentReference docRef) {
         CompletableFuture<Map<String, Object>> completableFuture = new CompletableFuture<>();
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    Map<String, Object> data = task.getResult().getData();
-                    Log.d("FirebaseUtil", "DocumentSnapshot data: " + data);
-                    completableFuture.complete(data);
-                } else {
-                    Log.d("FirebaseUtil", "Error getting document", task.getException());
-                    completableFuture.completeExceptionally(task.getException());
-                }
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Map<String, Object> data = task.getResult().getData();
+                Log.d("FirebaseUtil", "DocumentSnapshot data: " + data);
+                completableFuture.complete(data);
+            } else {
+                Log.d("FirebaseUtil", "Error getting document", task.getException());
+                completableFuture.completeExceptionally(task.getException());
             }
         });
 
         return completableFuture;
     }
+
+
 
 }

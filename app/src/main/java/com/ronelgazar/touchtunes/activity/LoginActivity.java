@@ -75,17 +75,11 @@ public class LoginActivity extends AppCompatActivity {
                 CompletableFuture<Patient> patientFuture = firebaseUtil.getPatient(user.getUid());
 
                 patientFuture.thenAcceptAsync(patient -> {
-                    if (patient != null) {
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra("patient", (Parcelable) patient);
-                        startActivity(intent);
-                    } else {
-                        Patient newPatient = new Patient(user.getUid(), false, null, user.getDisplayName(), null);
-                        firebaseUtil.createPatient(newPatient);
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra("patient", (Parcelable) newPatient);
-                        startActivity(intent);
-                    }
+
+                    Intent intent = new Intent(this, MainActivity.class);
+
+                    intent.putExtra("patient", patient);
+                    startActivity(intent);
                 });
 
             } else {
