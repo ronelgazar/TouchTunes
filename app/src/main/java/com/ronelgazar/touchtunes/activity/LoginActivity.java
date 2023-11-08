@@ -2,6 +2,8 @@ package com.ronelgazar.touchtunes.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.ronelgazar.touchtunes.R;
 import com.ronelgazar.touchtunes.model.Patient;
 import com.ronelgazar.touchtunes.util.FirebaseUtil;
+import com.ronelgazar.touchtunes.util.FirebaseUtil.DataCallback;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -38,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private List<AuthUI.IdpConfig> providers;
     private Intent signInIntent;
     private FirebaseUtil firebaseUtil;
+    private Patient patient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,15 +76,30 @@ public class LoginActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 Log.d("USER", user.getUid());
-                CompletableFuture<Patient> patientFuture = firebaseUtil.getPatient(user.getUid());
+                Handler handler = new Handler(Looper.getMainLooper());
 
-                patientFuture.thenAcceptAsync(patient -> {
+                FirebaseUtil firebaseUtil = new FirebaseUtil();
+                DocumentReference docRef = firebaseUtil.getDb().collection("Patients").document(user.getUid());
 
-                    Intent intent = new Intent(this, MainActivity.class);
+                firebaseUtil.getDocRefData(docRef, new DataCallback() {
+                    @Override
+                    public void onCallback(Map<String, Object> data) {
+                        if (data != null) {
+                            handler.post(() -> {
+                                patient = new Patient(data);
 
-                    intent.putExtra("patient", patient);
-                    startActivity(intent);
+                                // Update the UI with the patient data here
+                            });
+                        } else {
+                            // Handle the error here
+                            
+                        }
+                    }
                 });
+                Intent intent = new Intent(this, MainActivity.class);
+
+                intent.putExtra("patient", patient);
+                startActivity(intent);
 
             } else {
                 // Show an error toast.

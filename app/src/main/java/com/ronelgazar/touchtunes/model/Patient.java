@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.ronelgazar.touchtunes.util.DefualtData;
 import com.ronelgazar.touchtunes.util.FirebaseUtil;
+import com.ronelgazar.touchtunes.util.FirebaseUtil.DataCallback;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -63,25 +64,17 @@ public class Patient implements Parcelable {
         this.modeRef = (DocumentReference) dataMap.get("mode");
         this.playlistRef = (DocumentReference) dataMap.get("playlist");
 
-        CompletableFuture<Map<String, Object>> playlistDataFuture = firebaseUtil.getDocRefData(this.playlistRef);
-        CompletableFuture<Map<String, Object>> modeDataFuture = firebaseUtil.getDocRefData(this.modeRef);
-
-
-        playlistDataFuture.thenAcceptBoth(modeDataFuture, (playlistData, modeData) -> {
-            Map<String, Object> playlistDataTemp = playlistData;
-            Map<String, Object> modeDataTemp = modeData;
-
-            if (!playlistDataTemp.isEmpty()) {
-                this.playlist = new Playlist(playlistDataTemp);
+        firebaseUtil.getDocRefData(this.playlistRef, new DataCallback() {
+            @Override
+            public void onCallback(Map<String, Object> data) {
+                playlist = new Playlist(data);
             }
-            else {
-                this.playlist = DefualtData.getDefaultPlaylist();
-            }
-            if (!modeDataTemp.isEmpty()) {
-                this.mode =  new Mode(modeDataTemp);
-            }
-            else {
-                this.mode = DefualtData.getDefaultMode();
+        });
+    
+        firebaseUtil.getDocRefData(this.modeRef, new DataCallback() {
+            @Override
+            public void onCallback(Map<String, Object> data) {
+                mode = new Mode(data);
             }
         });
     }

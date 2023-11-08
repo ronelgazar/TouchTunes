@@ -15,6 +15,8 @@ import com.ronelgazar.touchtunes.model.Patient;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.util.Log;
 
@@ -29,21 +31,19 @@ public class FirebaseUtil {
 
     private FirebaseFirestore db;
 
-    private FirebaseFirestoreSettings settings ;
-
+    private FirebaseFirestoreSettings settings;
 
     public FirebaseUtil() {
 
         db = FirebaseFirestore.getInstance();
-        settings =
-                new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
-                        // Use memory-only cache
-                        .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
-                        // Use persistent disk cache (default)
-                        .setLocalCacheSettings(PersistentCacheSettings.newBuilder()
-                                .build())
+        settings = new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
+                // Use memory-only cache
+                .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
+                // Use persistent disk cache (default)
+                .setLocalCacheSettings(PersistentCacheSettings.newBuilder()
+                        .build())
 
-                        .build();
+                .build();
 
         db.setFirestoreSettings(settings);
     }
@@ -95,6 +95,21 @@ public class FirebaseUtil {
         return completableFuture;
     }
 
+    public void getDocRefData(DocumentReference docRef, DataCallback callback) {
+        Handler handler = new Handler(Looper.getMainLooper());
 
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    Map<String, Object> data = task.getResult().getData();
+                    handler.post(() -> callback.onCallback(data));
+                } else {
+                    Log.d("FirebaseUtil", "Error getting document", task.getException());
+                    callback.onCallback(null);
+                }
+            }
+        });
+    }
 
 }
