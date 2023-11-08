@@ -71,10 +71,14 @@ public class FirebaseUtil {
                 if (task.isSuccessful()) {
                     Map<String, Object> data = task.getResult().getData();
                     Log.d("FirebaseUtil", "DocumentSnapshot data: " + data);
-                    completableFuture.complete(data);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        completableFuture.complete(data);
+                    }
                 } else {
                     Log.d("FirebaseUtil", "Error getting document", task.getException());
-                    completableFuture.completeExceptionally(task.getException());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        completableFuture.completeExceptionally(task.getException());
+                    }
                 }
             }
         });
