@@ -44,6 +44,7 @@ public class Playlist implements Parcelable {
         this.playList = playList;
     }
 
+
     public Playlist(Map<String, Object> playlist) {
         List<Map<String, Object>> songsMapList = (List<Map<String, Object>>) playlist.get("songs");
         List<Song> songs = new ArrayList<>();
@@ -52,13 +53,10 @@ public class Playlist implements Parcelable {
             String name = (String) songMap.get("name");
             Song song = new Song(name, url);
             songs.add(song);
-            song.printSong();
         }
-
         this.playList = songs;
-        printPlaylist();
-
     }
+
 
     public List<Song> getPlayList() {
         return playList;
@@ -102,7 +100,7 @@ public class Playlist implements Parcelable {
     }
 
     public void skipSong(Song song) {
-        if (playList.size() > 0) {
+        if (!playList.isEmpty()) {
             int index = playList.indexOf(song);
             if (index != -1) {
                 Song currentSong = playList.get(index);
@@ -119,7 +117,7 @@ public class Playlist implements Parcelable {
     }
 
     public void prevSong() {
-        if (playList.size() > 0) {
+        if (!playList.isEmpty()) {
             Song currentSong = playList.get(0);
             currentSong.stopSong();
             playList.remove(0);
@@ -134,8 +132,8 @@ public class Playlist implements Parcelable {
 
     public void printPlaylist() {
         for (Song song : playList) {
-            Log.d("BBBBBBBBBB", "Song title: " + song.getTitle());
-            Log.d("BBBBBBBBBB", "Song url: " + song.getUrl());
+            Log.d("Song", "Song title: " + song.getTitle());
+            Log.d("Song", "Song url: " + song.getUrl());
         }
     }
 

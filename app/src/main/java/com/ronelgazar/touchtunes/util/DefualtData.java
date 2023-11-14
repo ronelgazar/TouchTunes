@@ -1,6 +1,7 @@
 package com.ronelgazar.touchtunes.util;
 
 import com.ronelgazar.touchtunes.model.Mode;
+import com.ronelgazar.touchtunes.model.Patient;
 import com.ronelgazar.touchtunes.model.Playlist;
 import com.ronelgazar.touchtunes.model.Song;
 
@@ -34,9 +35,20 @@ public class DefualtData {
         settings.put("lighting", 5);
         settings.put("session_duration", "53:00");
         settings.put("sound_interaction", true);
-        Mode mode1 = new Mode("mode1", settings);;
+        Mode mode1 = new Mode("mode1", settings);
         return mode1;
 
+    }
+
+
+    public static Patient getDefaultPatient()
+    {
+        Patient patient = new Patient();
+        patient.setActive(true);
+        patient.setName("ronel");
+        patient.setMode(getDefaultMode());
+        patient.setPlaylist(getDefaultPlaylist());
+        return patient;
     }
 
 
