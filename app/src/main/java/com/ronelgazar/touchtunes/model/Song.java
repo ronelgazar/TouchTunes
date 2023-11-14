@@ -1,29 +1,23 @@
 package com.ronelgazar.touchtunes.model;
 
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 public class Song implements Parcelable  {
 
     private String title;
     private String url;
-    private static MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     public Song() {
+        this.mediaPlayer = new MediaPlayer();
     }
-
     protected Song(Parcel in) {
         title = in.readString();
         url = in.readString();
+        
     }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -80,23 +74,23 @@ public class Song implements Parcelable  {
 
     }
 
-
     public void playSong() {
-        //TODO  Get a reference to the file in Firebase Storage.
-
-
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-
+    
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(url);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            mediaPlayer.prepareAsync();
         } catch (IOException e) {
             Log.e("Song", "Failed to play song", e);
-
         }
     }
 
@@ -107,8 +101,6 @@ public class Song implements Parcelable  {
             mediaPlayer = null;
         }
     }
-
-    // pauseSong and resumeSong()
 
     public void pauseSong() {
         if (mediaPlayer != null) {

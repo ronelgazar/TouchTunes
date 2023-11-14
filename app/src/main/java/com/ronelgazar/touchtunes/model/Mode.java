@@ -2,10 +2,7 @@ package com.ronelgazar.touchtunes.model;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.firebase.firestore.DocumentReference;
-import com.ronelgazar.touchtunes.util.FirebaseUtil;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;

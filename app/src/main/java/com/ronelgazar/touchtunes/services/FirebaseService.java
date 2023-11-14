@@ -1,4 +1,4 @@
-package com.ronelgazar.touchtunes.util;
+package com.ronelgazar.touchtunes.services;
 
 import androidx.annotation.NonNull;
 
@@ -13,39 +13,70 @@ import com.google.firebase.firestore.PersistentCacheSettings;
 import com.google.firebase.firestore.SetOptions;
 import com.ronelgazar.touchtunes.model.Patient;
 
+import android.app.Service;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.util.Log;
-
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
-public class FirebaseUtil {
+public class FirebaseService extends Service {
+    private FirebaseFirestore db;
+    private FirebaseFirestoreSettings settings;
 
     public interface DataCallback {
         void onCallback(Map<String, Object> data);
     }
 
-    private FirebaseFirestore db;
-
-    private FirebaseFirestoreSettings settings;
-
-    public FirebaseUtil() {
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
         db = FirebaseFirestore.getInstance();
         settings = new FirebaseFirestoreSettings.Builder(db.getFirestoreSettings())
-                // Use memory-only cache
                 .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
-                // Use persistent disk cache (default)
-                .setLocalCacheSettings(PersistentCacheSettings.newBuilder()
-                        .build())
-
+                .setLocalCacheSettings(PersistentCacheSettings.newBuilder().build())
                 .build();
 
         db.setFirestoreSettings(settings);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent.getAction();
+        if ("com.ronelgazar.touchtunes.action.CREATE_PATIENT".equals(action)) {
+            Patient patient = getParcelableCompat(intent.getExtras(), "patient", Patient.class);
+            if (patient != null) {
+                createPatient(patient);
+            }
+        } else if ("com.ronelgazar.touchtunes.action.GET_PATIENT".equals(action)) {
+            String userId = intent.getStringExtra("userId");
+            if (userId != null) {
+                getPatient(userId);
+            }
+        }
+        return START_STICKY;
+    }
+    
+    public void getPatient(String userId) {
+        DocumentReference docRef = db.collection("Patients").document(userId);
+        getDocRefData(docRef, data -> {
+            if (data != null) {
+                Patient patient = new Patient(data);
+                Intent intent = new Intent("com.ronelgazar.touchtunes.action.PATIENT_DATA");
+                intent.putExtra("patient", patient);
+                sendBroadcast(intent);
+            }
+        });
+    }
+    
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public FirebaseFirestore getDb() {
@@ -64,35 +95,10 @@ public class FirebaseUtil {
         db.collection("Patients").document(patient.getUid()).set(patient);
     }
 
-    public CompletableFuture<Patient> getPatient(String uid) {
-        DocumentReference docRef = db.collection("Patients").document(uid);
-        return getDocRefData(docRef).thenApply(data -> {
-            Patient patient = new Patient(data);
-            return patient;
-        });
-
-    }
 
     public void updatePatient(Patient patient) {
         DocumentReference docRef = db.collection("Patients").document(patient.getUid());
         docRef.set(patient, SetOptions.merge());
-    }
-
-    public CompletableFuture<Map<String, Object>> getDocRefData(DocumentReference docRef) {
-        CompletableFuture<Map<String, Object>> completableFuture = new CompletableFuture<>();
-
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Map<String, Object> data = task.getResult().getData();
-                Log.d("FirebaseUtil", "DocumentSnapshot data: " + data);
-                completableFuture.complete(data);
-            } else {
-                Log.d("FirebaseUtil", "Error getting document", task.getException());
-                completableFuture.completeExceptionally(task.getException());
-            }
-        });
-
-        return completableFuture;
     }
 
     public void getDocRefData(DocumentReference docRef, DataCallback callback) {
@@ -111,5 +117,4 @@ public class FirebaseUtil {
             }
         });
     }
-
 }
