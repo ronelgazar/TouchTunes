@@ -1,11 +1,15 @@
 package com.ronelgazar.touchtunes.model;
-
-import java.util.HashMap;
-import java.util.Map;
-import com.google.firebase.firestore.DocumentReference;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+
+import com.google.firebase.firestore.DocumentReference;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Mode implements Parcelable {
 
@@ -13,10 +17,16 @@ public class Mode implements Parcelable {
     private Map<String, Object> settings;
     private DocumentReference documentReference;
 
-     protected Mode(Parcel in) {
+
+    protected Mode(Parcel in) {
         name = in.readString();
-        settings = new HashMap<>();
-        in.readMap(settings, Object.class.getClassLoader());
+        Bundle settingsBundle = in.readBundle(getClass().getClassLoader());
+        if (settingsBundle != null) {
+            settings = new HashMap<>();
+            for (String key : settingsBundle.keySet()) {
+                settings.put(key, settingsBundle.get(key));
+            }
+        }
     }
 
     public static final Creator<Mode> CREATOR = new Creator<Mode>() {
@@ -39,11 +49,24 @@ public class Mode implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeMap(settings);
+        Bundle settingsBundle = new Bundle();
+        if (settings != null) {
+            for (String key : settings.keySet()) {
+                settingsBundle.putParcelable(key, getObjectAsParcelable(settings.get(key)));
+            }
+        }
+        dest.writeBundle(settingsBundle);
     }
 
+    private Parcelable getObjectAsParcelable(Object object) {
+        if (object instanceof Parcelable) {
+            return (Parcelable) object;
+        }
+        return null;
+    }
 
     public Mode() {
+        settings = new HashMap<>();
     }
 
     public Mode(String name, Map<String, Object> settings) {
@@ -51,10 +74,29 @@ public class Mode implements Parcelable {
         this.settings = settings;
     }
 
-    public Mode(Map<String,Object> mode)
-    {
+    public Mode(Map<String, Object> mode) {
+        // ... (null checks and type safety as before)
+
+        // Assign values directly to fields from the map
         this.name = (String) mode.get("name");
         this.settings = (Map<String, Object>) mode.get("settings");
+
+        // Iterate through remaining entries and assign to fields
+        for (Map.Entry<String, Object> entry : mode.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            try {
+                Field field = Mode.class.getDeclaredField(key);
+                if (field != null) { // Ensure field exists
+                    // Make field accessible for private fields
+                    field.setAccessible(true);
+                    field.set(this, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                // Handle cases where field doesn't exist or is inaccessible
+                // You can log a warning or throw an exception
+            }
+        }
     }
 
     public String getName() {
@@ -73,32 +115,26 @@ public class Mode implements Parcelable {
         this.settings = settings;
     }
 
-    public int getInteractionDuration() {
-        return (int) settings.get("interaction_duration");
+    public String getInteractionDuration() {
+        return String.valueOf( settings.get("interaction_duration"));
     }
 
     public void setInteractionDuration(String interactionDuration) {
-        settings.put("interaction_duration", interactionDuration);
+        int interactionDurationInt = Integer.parseInt(interactionDuration);
+        settings.put("interaction_duration", interactionDurationInt);
     }
 
+
     public String getInteractionType() {
-        return (String) settings.get("interaction_type");
+        return String.valueOf(settings.get("interaction_type"));
     }
 
     public void setInteractionType(String interactionType) {
         settings.put("interaction_type", interactionType);
     }
 
-    public int getLighting() {
-        return (int) settings.get("lighting");
-    }
-
-    public void setLighting(String lighting) {
-        settings.put("lighting", lighting);
-    }
-
     public String getSessionDuration() {
-        return (String) settings.get("session_duration");
+        return String.valueOf(settings.get("session_duration"));
     }
 
     public void setSessionDuration(String sessionDuration) {
@@ -106,24 +142,42 @@ public class Mode implements Parcelable {
     }
 
     public boolean getSoundInteraction() {
-        return  (boolean) settings.get("sound_interaction");
+        return String.valueOf(settings.get("sound_interaction")).equals("true");
     }
 
-    public void setSoundInteraction(String soundInteraction) {
+    public void setSoundInteraction(boolean soundInteraction) {
         settings.put("sound_interaction", soundInteraction);
     }
 
-    public int getVibration() {
-        return (int) settings.get("vibration");
+    public String getVibrationIntensity() {
+        return String.valueOf(settings.get("vibration_intensity"));
     }
 
-    public void setVibration(String vibration) {
-        settings.put("vibration", vibration);
+    public void setVibrationIntensity(String vibrationIntensity) {
+        int vibrationIntensityInt = Integer.parseInt(vibrationIntensity);
+        settings.put("vibration_intensity", vibrationIntensityInt);
+    }
+
+    public String getSessionDurationInMinutes() {
+        String[] parts = getSessionDuration().split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+        return String.valueOf( hours * 60 + minutes);
     }
 
     public void printMode() {
-        Log.d("Patient", "Mode documentReference: " + documentReference);
-        Log.d("Patient", "Mode name: " + name);
-        Log.d("Patient", "Mode settings: " + settings);
+        Log.d("Mode", "Mode documentReference: " + documentReference);
+        Log.d("Mode", "Mode name: " + name);
+        Log.d("Mode", "Mode settings: " + settings);
+    }
+
+    public void setSharedPreference(SharedPreferences sharedPreferences) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("interaction_duration", this.getInteractionDuration());
+        editor.putString("interaction_type", this.getInteractionType());
+        editor.putString("session_duration", this.getSessionDuration());
+        editor.putBoolean("sound_interaction", this.getSoundInteraction());
+        editor.putString("vibration_intensity", this.getVibrationIntensity());
+        editor.apply();
     }
 }

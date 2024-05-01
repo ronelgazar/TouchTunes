@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 public class Playlist implements Parcelable {
-    List<Song> playList = new ArrayList<>();
+    private List<Song> playList;
 
     protected Playlist(Parcel in) {
         playList = in.createTypedArrayList(Song.CREATOR);
@@ -26,6 +26,10 @@ public class Playlist implements Parcelable {
         }
     };
 
+    public Playlist() {
+
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -37,7 +41,7 @@ public class Playlist implements Parcelable {
     }
 
     public Playlist(Playlist playlist) {
-        this.playList = playlist.getPlayList();
+        playList = playlist.getPlayList();
     }
 
     public Playlist(List<Song> playList) {
@@ -46,17 +50,21 @@ public class Playlist implements Parcelable {
 
 
     public Playlist(Map<String, Object> playlist) {
-        List<Map<String, Object>> songsMapList = (List<Map<String, Object>>) playlist.get("songs");
         List<Song> songs = new ArrayList<>();
-        for (Map<String, Object> songMap : songsMapList) {
-            String url = (String) songMap.get("URL");
-            String name = (String) songMap.get("name");
-            Song song = new Song(name, url);
-            songs.add(song);
+        List<Map<String, Object>> songsMapList = new ArrayList<>();
+        if (playlist != null) {
+            songsMapList = (List<Map<String, Object>>) playlist.get("songs");
+            for (Map<String, Object> songMap : songsMapList) {
+                String url = (String) songMap.get("URL");
+                String name = (String) songMap.get("name");
+                Song song = new Song(name, url);
+                songs.add(song);
+            }
+        } else {
+            Log.d("Playlist", "Provided playlist map is null");
         }
         this.playList = songs;
     }
-
 
     public List<Song> getPlayList() {
         return playList;
@@ -67,19 +75,19 @@ public class Playlist implements Parcelable {
     }
 
     public void addSong(Song song) {
-        playList.add(song);
+        this.playList.add(song);
     }
 
     public void removeSong(Song song) {
-        playList.remove(song);
+        this.playList.remove(song);
     }
 
     public void clearPlaylist() {
-        playList.clear();
+        this.playList.clear();
     }
 
     public Song getSong(int index) {
-        return playList.get(index);
+        return this.playList.get(index);
     }
 
     public int getPlaylistSize() {
@@ -91,7 +99,7 @@ public class Playlist implements Parcelable {
     }
 
     public Song findSong(String title) {
-        for (Song song : playList) {
+        for (Song song : this.playList) {
             if (song.getTitle().equals(title)) {
                 return song;
             }
@@ -99,39 +107,41 @@ public class Playlist implements Parcelable {
         return null;
     }
 
-    public void skipSong(Song song) {
-        if (!playList.isEmpty()) {
-            int index = playList.indexOf(song);
+    public String skipSong(Song song) {
+        if (!this.playList.isEmpty()) {
+            int index = this.playList.indexOf(song);
             if (index != -1) {
-                Song currentSong = playList.get(index);
+                Song currentSong = this.playList.get(index);
                 currentSong.stopSong();
-                playList.remove(index);
-                playList.add(currentSong);
-                currentSong = playList.get(0);
+                this.playList.remove(index);
+                this.playList.add(currentSong);
+                currentSong = this.playList.get(0);
                 currentSong.playSong();
+                return currentSong.getTitle();
             }
         } else {
             Log.d("Playlist", "Playlist is empty");
         }
-
+        return "";
     }
 
-    public void prevSong() {
-        if (!playList.isEmpty()) {
-            Song currentSong = playList.get(0);
+    public String prevSong() {
+        if (!this.playList.isEmpty()) {
+            Song currentSong = this.playList.get(0);
             currentSong.stopSong();
-            playList.remove(0);
-            playList.add(currentSong);
+            this.playList.remove(0);
+            this.playList.add(currentSong);
             currentSong = playList.get(0);
             currentSong.playSong();
+            return currentSong.getTitle();
         } else {
             Log.d("Playlist", "Playlist is empty");
         }
-
+        return "";
     }
 
     public void printPlaylist() {
-        for (Song song : playList) {
+        for (Song song : this.playList) {
             Log.d("Song", "Song title: " + song.getTitle());
             Log.d("Song", "Song url: " + song.getUrl());
         }

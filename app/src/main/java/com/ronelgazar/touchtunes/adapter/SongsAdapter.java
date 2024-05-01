@@ -52,17 +52,14 @@ public class SongsAdapter extends BaseAdapter {
         TextView songTitleTextView = view.findViewById(R.id.song_title_text_view);
         songTitleTextView.setText(song.getTitle());
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(song.getUrl());
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        view.setOnClickListener(view1 -> {
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(song.getUrl());
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 

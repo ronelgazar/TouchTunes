@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
     <androidx.preference.PreferenceCategory
         app:title="Settings">
@@ -27,7 +27,6 @@
             android:key="session_duration"
             android:title="Session Duration (minutes)"
             android:summary="Set the session duration"
-            android:inputType="number"
             />
 
         <!-- Sound Interaction -->
@@ -44,6 +43,11 @@
             android:summary="Set the vibration intensity (0 = off, 100 = full)"
             />
 
+        <androidx.preference.EditTextPreference
+            android:key="lighting"
+            android:title="Lighting"
+            android:summary="Set the lighting level"
+            />
         <!-- Add more preferences as needed -->
 
     </androidx.preference.PreferenceCategory>

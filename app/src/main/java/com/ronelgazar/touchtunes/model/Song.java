@@ -4,8 +4,8 @@ import android.media.MediaPlayer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
 import java.io.IOException;
+
 public class Song implements Parcelable  {
 
     private String title;
@@ -118,5 +118,6 @@ public class Song implements Parcelable  {
         Log.d("Song", "Song title: " + title);
         Log.d("Song", "Song url: " + url);
     }
-    
+
+
 }

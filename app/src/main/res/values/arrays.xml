@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="interaction_type_entries">
+        <item>Light only</item>
+        <item>Sound only</item>
+        <item>Light and Sound</item>
+    </string-array>
+
+    <!-- Interaction Type Values -->
+    <string-array name="interaction_type_values">
+        <item>light_only</item>
+        <item>sound_only</item>
+        <item>light_and_sound</item>
+    </string-array>
+</resources>
