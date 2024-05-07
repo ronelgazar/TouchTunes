@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="interaction_duration_default">10</integer>
+
+    <string-array name="interaction_types">
+        <item>Slow</item>
+        <item>Medium</item>
+        <item>Fast</item>
+    </string-array>
+    <string-array name="interaction_type_values">
+        <item>Light only</item>
+        <item>Vibration only</item>
+        <item>both</item>
+    </string-array>
+
+    <integer name="session_duration_default">30</integer>
+
+    <bool name="sound_interaction_default">false</bool>
+
+    <integer name="vibration_intensity_default">50</integer>
+
+</resources>

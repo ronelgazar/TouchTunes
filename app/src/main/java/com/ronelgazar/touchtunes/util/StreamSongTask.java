@@ -1,7 +1,18 @@
 package com.ronelgazar.touchtunes.util;
 
+
+
+import static android.content.Context.VIBRATOR_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.Intent;
+import android.os.Vibrator;
+
 import com.ronelgazar.touchtunes.model.Song;
+import com.ronelgazar.touchtunes.services.BackgroundService;
+
 import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.util.Log;
 
 public class StreamSongTask extends AsyncTask<Song, Void, Void> {

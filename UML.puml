@@ -1,0 +1,249 @@
+@startuml
+class com.ronelgazar.touchtunes.activity.LoginActivity {
+- ActivityResultLauncher<Intent> signInLauncher
+- List<AuthUI.IdpConfig> providers
+- Intent signInIntent
+- FirebaseUser user
+- FirebaseService firebaseService
+- boolean isServiceBound
+- ServiceConnection serviceConnection
+# void onCreate(Bundle)
+- void onSignInResult(FirebaseAuthUIAuthenticationResult)
+- void showToast(String)
+# void onDestroy()
+}
+
+
+class com.ronelgazar.touchtunes.util.DefualtData {
++ {static} Playlist getDefaultPlaylist()
++ {static} Mode getDefaultMode()
++ {static} Patient getDefaultPatient()
+}
+
+class com.ronelgazar.touchtunes.adapter.SongsAdapter {
+- Context context
+- List<Song> songs
+- MediaPlayer mediaPlayer
++ <<Create>> SongsAdapter(Context,List<Song>)
++ int getCount()
++ Object getItem(int)
++ long getItemId(int)
++ View getView(int,View,ViewGroup)
++ void notifyDataSetChanged()
+}
+
+
+class com.ronelgazar.touchtunes.model.Playlist {
+- List<Song> playList
++ {static} Creator<Playlist> CREATOR
+# <<Create>> Playlist(Parcel)
++ <<Create>> Playlist(Playlist)
++ <<Create>> Playlist(List<Song>)
++ <<Create>> Playlist(Map<String,Object>)
++ int describeContents()
++ void writeToParcel(Parcel,int)
++ List<Song> getPlayList()
++ void setPlayList(List<Song>)
++ void addSong(Song)
++ void removeSong(Song)
++ void clearPlaylist()
++ Song getSong(int)
++ int getPlaylistSize()
++ void setSong(int,Song)
++ Song findSong(String)
++ String skipSong(Song)
++ String prevSong()
++ void printPlaylist()
+}
+
+
+class com.ronelgazar.touchtunes.ExampleInstrumentedTest {
++ void useAppContext()
+}
+
+class com.ronelgazar.touchtunes.activity.MainActivity {
+- Toolbar toolbar
+- ImageButton playButton
+- Patient patient
+- Song currentSong
+- NavigationView navigationView
+- DrawerLayout drawerLayout
+- FragmentManager fragmentManager
+- BroadcastReceiver patientDataReceiver
+# void onResume()
+# void onPause()
+# void onCreate(Bundle)
+}
+
+
+class com.ronelgazar.touchtunes.ExampleUnitTest {
++ void addition_isCorrect()
+}
+
+class com.ronelgazar.touchtunes.model.Song {
+- String title
+- String url
+- MediaPlayer mediaPlayer
++ {static} Creator<Song> CREATOR
++ <<Create>> Song()
+# <<Create>> Song(Parcel)
++ <<Create>> Song(String,String)
++ int describeContents()
++ void writeToParcel(Parcel,int)
++ String getTitle()
++ void setTitle(String)
++ String getUrl()
++ void setUrl(String)
++ MediaPlayer getMediaPlayer()
++ void setMediaPlayer(MediaPlayer)
++ void playSong()
++ void stopSong()
++ void pauseSong()
++ void resumeSong()
++ void printSong()
+}
+
+
+class com.ronelgazar.touchtunes.model.Therapist {
+- String name
++ <<Create>> Therapist()
++ <<Create>> Therapist(String)
++ String getName()
++ void setName(String)
+}
+
+
+class com.ronelgazar.touchtunes.util.StreamSongTask {
+# Void doInBackground(Song)
+}
+
+class com.ronelgazar.touchtunes.services.FirebaseService {
+- {static} String TAG
+- {static} String PATIENTS_COLLECTION
+- {static} FirebaseFirestore db
+- {static} FirebaseFirestoreSettings settings
+- DataCallback callback
++ void onCreate()
+- void initializeFirestore()
++ IBinder onBind(Intent)
++ {static} T getParcelableCompat(Bundle,String,Class<T>)
++ void getPatient(String,DataCallback)
++ void createPatient(Patient)
++ void updatePatient(Patient)
+- void getDocRefData(DocumentReference)
++ void getDocRefData(DocumentReference,DataCallback)
+}
+
+
+interface com.ronelgazar.touchtunes.services.FirebaseService$DataCallback {
+~ void onCallback(Map<String,Object>)
+}
+
+class com.ronelgazar.touchtunes.services.FirebaseService$LocalBinder {
++ FirebaseService getService()
+}
+
+class com.ronelgazar.touchtunes.model.Patient {
+- String uid
+- boolean isActive
+- Mode mode
+- String name
+- Playlist playlist
+- FirebaseService firebaseService
+- DocumentReference playlistRef
+- DocumentReference modeRef
++ {static} Creator<Patient> CREATOR
+# <<Create>> Patient(Parcel)
++ <<Create>> Patient()
++ <<Create>> Patient(Map<String,Object>,PatientCallback)
++ <<Create>> Patient(Map<String,Object>)
++ void save(Context,FirebaseService)
++ String getUid()
++ void setUid(String)
++ boolean isActive()
++ void setPlaylist(Playlist)
++ void setActive(boolean)
++ Mode getMode()
++ void setMode(Mode)
++ String getName()
++ void setName(String)
++ Playlist getPlaylist()
++ void printPatient()
++ int describeContents()
++ void writeToParcel(Parcel,int)
+}
+
+
+interface com.ronelgazar.touchtunes.model.Patient$PatientCallback {
+~ void onPatientDataLoaded(Patient)
+}
+
+class com.ronelgazar.touchtunes.fragment.SettingsFragment {
+- Mode mode
++ void onCreatePreferences(Bundle,String)
+- void bindPreferences()
+- void updatePreferenceSummary(Preference,String)
+}
+
+
+class com.ronelgazar.touchtunes.model.Mode {
+- String name
+- Map<String,Object> settings
+- DocumentReference documentReference
++ {static} Creator<Mode> CREATOR
+# <<Create>> Mode(Parcel)
++ <<Create>> Mode()
++ <<Create>> Mode(String,Map<String,Object>)
++ <<Create>> Mode(Map<String,Object>)
++ int describeContents()
++ void writeToParcel(Parcel,int)
+- Parcelable getObjectAsParcelable(Object)
++ String getName()
++ void setName(String)
++ Map<String,Object> getSettings()
++ void setSettings(Map<String,Object>)
++ String getInteractionDuration()
++ void setInteractionDuration(String)
++ String getInteractionType()
++ void setInteractionType(String)
++ String getSessionDuration()
++ void setSessionDuration(String)
++ boolean getSoundInteraction()
++ void setSoundInteraction(boolean)
++ String getVibrationIntensity()
++ void setVibrationIntensity(String)
++ String getSessionDurationInMinutes()
++ void printMode()
++ void setSharedPreference(SharedPreferences)
+}
+
+
+class com.ronelgazar.touchtunes.services.BackgroundService {
+- Vibrator vibrator
+- Camera camera
+- Parameters params
++ void onCreate()
++ int onStartCommand(Intent,int,int)
++ void onDestroy()
++ IBinder onBind(Intent)
+}
+
+
+
+
+androidx.appcompat.app.AppCompatActivity <|-- com.ronelgazar.touchtunes.activity.LoginActivity
+android.widget.BaseAdapter <|-- com.ronelgazar.touchtunes.adapter.SongsAdapter
+android.os.Parcelable <|.. com.ronelgazar.touchtunes.model.Playlist
+androidx.appcompat.app.AppCompatActivity <|-- com.ronelgazar.touchtunes.activity.MainActivity
+android.os.Parcelable <|.. com.ronelgazar.touchtunes.model.Song
+android.os.AsyncTask <|-- com.ronelgazar.touchtunes.util.StreamSongTask
+android.app.Service <|-- com.ronelgazar.touchtunes.services.FirebaseService
+com.ronelgazar.touchtunes.services.FirebaseService +.. com.ronelgazar.touchtunes.services.FirebaseService$DataCallback
+com.ronelgazar.touchtunes.services.FirebaseService +.. com.ronelgazar.touchtunes.services.FirebaseService$LocalBinder
+com.ronelgazar.touchtunes.services.Binder <|-- com.ronelgazar.touchtunes.services.FirebaseService$LocalBinder
+android.os.Parcelable <|.. com.ronelgazar.touchtunes.model.Patient
+com.ronelgazar.touchtunes.model.Patient +.. com.ronelgazar.touchtunes.model.Patient$PatientCallback
+androidx.preference.PreferenceFragmentCompat <|-- com.ronelgazar.touchtunes.fragment.SettingsFragment
+android.os.Parcelable <|.. com.ronelgazar.touchtunes.model.Mode
+android.app.Service <|-- com.ronelgazar.touchtunes.services.BackgroundService
+@enduml

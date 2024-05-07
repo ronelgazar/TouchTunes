@@ -1,130 +1,104 @@
 package com.ronelgazar.touchtunes.fragment;
 
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.ronelgazar.touchtunes.R;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.Spinner;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.ronelgazar.touchtunes.model.Mode;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private Mode settings;
-
-    private Spinner interactionDurationSpinner;
-    private Spinner interactionTypeSpinner;
-    private Spinner lightingSpinner;
-    private Spinner sessionDurationSpinner;
-    private Spinner soundInteractionSpinner;
-    private Spinner vibrationSpinner;
-    private Button popOutButton;
+    private Mode mode;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.preferences, rootKey);
+        mode = getArguments().getParcelable("mode");
+        if (mode == null) {
+            // Handle the case where mode is null (e.g., display an error message)
+            Log.e("SettingsFragment", "Missing mode data in fragment arguments");
+            return;
+        }
+        mode.printMode();
+        bindPreferences();
+    }
 
-        settings = new Mode();
+    private void bindPreferences() {
 
-        interactionDurationSpinner = view.findViewById(R.id.interaction_duration_spinner);
-        interactionTypeSpinner = view.findViewById(R.id.interaction_type_spinner);
-        lightingSpinner = view.findViewById(R.id.lighting_spinner);
-        sessionDurationSpinner = view.findViewById(R.id.session_duration_spinner);
-        soundInteractionSpinner = view.findViewById(R.id.sound_interaction_spinner);
-        vibrationSpinner = view.findViewById(R.id.vibration_spinner);
-        popOutButton = view.findViewById(R.id.pop_out_button);
-        // Update the UI elements to reflect the current settings values.
-        interactionDurationSpinner.setSelection(settings.getInteractionDuration());
-        interactionTypeSpinner.setSelection(Integer.parseInt(settings.getInteractionType()));
-        lightingSpinner.setSelection(settings.getLighting());
-        sessionDurationSpinner.setSelection(Integer.parseInt(settings.getSessionDuration()));
-        soundInteractionSpinner.setSelection(settings.getSoundInteraction() ? 1 : 0);
-        vibrationSpinner.setSelection(settings.getVibration());
-
-        // Add listeners to the UI elements to handle changes to the settings values.
-        interactionDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settings.setInteractionDuration(String.valueOf(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-        popOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.remove(SettingsFragment.this);
-                fragmentTransaction.commit();
+        // Interaction Duration (EditTextPreference)
+        EditTextPreference interactionDurationPref = (EditTextPreference) findPreference("interaction_duration");
+        interactionDurationPref.setText(String.valueOf(mode.getSessionDurationInMinutes()));
+        interactionDurationPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            try {
+                int newInteractionDuration = Integer.parseInt(newValue.toString());
+                mode.setSessionDuration(String.format("%02d:%02d", newInteractionDuration / 60, newInteractionDuration % 60));
+                updatePreferenceSummary(preference, newValue.toString());
+                return true;
+            } catch (NumberFormatException e) {
+                // Handle invalid input (e.g., show error message)
+                Log.w("SettingsFragment", "Invalid input for interaction duration");
+                return false;
             }
         });
 
-        interactionTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settings.setInteractionType(String.valueOf(position));
-            }
+        // Interaction Type (ListPreference)
+        ListPreference interactionTypePref = (ListPreference) findPreference("interaction_type");
+        interactionTypePref.setValue(mode.getInteractionType());
+        interactionTypePref.setOnPreferenceChangeListener((preference, newValue) -> {
+            mode.setInteractionType(newValue.toString());
+            updatePreferenceSummary(preference, newValue.toString());
+            return true;
+        });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        // Sound Interaction (SwitchPreferenceCompat)
+        SwitchPreferenceCompat soundInteractionPref = (SwitchPreferenceCompat) findPreference("sound_interaction");
+        soundInteractionPref.setChecked(mode.getSoundInteraction());
+        soundInteractionPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            mode.setSoundInteraction((Boolean) newValue);
+            updatePreferenceSummary(preference, String.valueOf(newValue));
+            return true;
+        });
+
+        // Vibration Intensity (EditTextPreference)
+        EditTextPreference vibrationIntensityPref = (EditTextPreference) findPreference("vibration");
+        vibrationIntensityPref.setText(String.valueOf(mode.getVibrationIntensity()));
+        vibrationIntensityPref.setOnPreferenceChangeListener((preference, newValue) -> {
+            try {
+                int newVibrationIntensity = Integer.parseInt(newValue.toString());
+                mode.setVibrationIntensity(newValue.toString());
+                updatePreferenceSummary(preference, newValue.toString());
+                return true;
+            } catch (NumberFormatException e) {
+                // Handle invalid input (e.g., show error message)
+                Log.w("SettingsFragment", "Invalid input for vibration intensity");
+                return false;
             }
         });
 
-        lightingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settings.setLighting(String.valueOf(position));
-            }
+        // Lighting (Preference - Assuming new preference)
+        Preference lightingPref = findPreference("lighting");
+        // Set default value or handle lighting preference as needed
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+    private void updatePreferenceSummary(Preference preference, String value) {
+        if (preference instanceof EditTextPreference) {
+            preference.setSummary(value);
+        } else if (preference instanceof ListPreference) {
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(value);
+            if (index >= 0) {
+                preference.setSummary(listPreference.getEntries()[index]);
             }
-        });
-
-        sessionDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settings.setSessionDuration(String.valueOf(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        soundInteractionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settings.setSoundInteraction(String.valueOf(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        vibrationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settings.setVibration(String.valueOf(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        return view;
+        } else if (preference instanceof SwitchPreferenceCompat) {
+            boolean boolValue = Boolean.parseBoolean(value);
+            preference.setSummary(boolValue ? "Enabled" : "Disabled");
+        }
     }
 }

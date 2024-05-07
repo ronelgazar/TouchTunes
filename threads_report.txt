@@ -1,0 +1,268 @@
+"Firebase Blocking Thread #0@5302" prio=5 tid=0x150 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Firebase Blocking Thread #0@5302
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c5> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:201)
+	  at java.util.concurrent.SynchronousQueue$TransferStack.awaitFulfill(SynchronousQueue.java:432)
+	  at java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:333)
+	  at java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:908)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1057)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+	  at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:-1)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Firebase Blocking Thread #1@6021" prio=5 tid=0x15c nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Firebase Blocking Thread #1@6021
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c7> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:201)
+	  at java.util.concurrent.SynchronousQueue$TransferStack.awaitFulfill(SynchronousQueue.java:432)
+	  at java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:333)
+	  at java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:908)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1057)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+	  at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:-1)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Firebase Background Thread #0@4549" prio=5 tid=0x147 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Firebase Background Thread #0@4549
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17bf> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:161)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2035)
+	  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:413)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1058)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+	  at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:-1)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Firebase Background Thread #1@5214" prio=5 tid=0x14d nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Firebase Background Thread #1@5214
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c2> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:161)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2035)
+	  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:413)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1058)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+	  at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:-1)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Firebase Background Thread #2@5221" prio=5 tid=0x14e nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Firebase Background Thread #2@5221
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c3> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:161)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2035)
+	  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:413)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1058)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+	  at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:-1)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Firebase Background Thread #3@5252" prio=5 tid=0x14f nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Firebase Background Thread #3@5252
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c4> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:161)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2035)
+	  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:413)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1058)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at com.google.firebase.concurrent.CustomThreadFactory.lambda$newThread$0$com-google-firebase-concurrent-CustomThreadFactory(CustomThreadFactory.java:47)
+	  at com.google.firebase.concurrent.CustomThreadFactory$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:-1)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"ScionFrontendApi@4510" prio=5 tid=0x146 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks ScionFrontendApi@4510
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17be> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:201)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2077)
+	  at java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:438)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1057)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"pool-3-thread-1@5175" prio=5 tid=0x14c nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks pool-3-thread-1@5175
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c1> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:161)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2035)
+	  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:413)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1058)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"ModernAsyncTask #1@5979" prio=5 tid=0x15a nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks ModernAsyncTask #1@5979
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Thread.parkFor$(Thread.java:2127)
+	  - locked <0x17c6> (a java.lang.Object)
+	  at sun.misc.Unsafe.park(Unsafe.java:325)
+	  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:161)
+	  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2035)
+	  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:413)
+	  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1058)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1118)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"OkHttp ConnectionPool@6033" daemon prio=5 tid=0x15d nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks OkHttp ConnectionPool@6033
+	  at java.lang.Object.wait(Object.java:-1)
+	  at com.android.okhttp.ConnectionPool.performCleanup(ConnectionPool.java:305)
+	  - locked <0x17c8> (a com.android.okhttp.ConnectionPool)
+	  at com.android.okhttp.ConnectionPool.runCleanupUntilPoolIsEmpty(ConnectionPool.java:242)
+	  at com.android.okhttp.ConnectionPool.-wrap0(ConnectionPool.java:-1)
+	  at com.android.okhttp.ConnectionPool$1.run(ConnectionPool.java:97)
+	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1133)
+	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:607)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"FinalizerDaemon@6072" daemon prio=5 tid=0x13f nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks FinalizerDaemon@6072
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Object.wait(Object.java:407)
+	  at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:188)
+	  - locked <0x17bc> (a java.lang.Object)
+	  at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:209)
+	  at java.lang.Daemons$FinalizerDaemon.run(Daemons.java:204)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"main@4348" prio=5 tid=0x1 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	  at android.os.MessageQueue.nativePollOnce(MessageQueue.java:-1)
+	  at android.os.MessageQueue.next(MessageQueue.java:323)
+	  at android.os.Looper.loop(Looper.java:136)
+	  at android.app.ActivityThread.main(ActivityThread.java:6077)
+	  at java.lang.reflect.Method.invoke(Method.java:-1)
+	  at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:866)
+	  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:756)
+
+"ReferenceQueueDaemon@6074" daemon prio=5 tid=0x13e nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks ReferenceQueueDaemon@6074
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Daemons$ReferenceQueueDaemon.run(Daemons.java:150)
+	  - locked <0xb9e> (a java.lang.Class)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"GmsDynamite@4628" prio=5 tid=0x149 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks GmsDynamite@4628
+	  at java.lang.Object.wait(Object.java:-1)
+	  at com.google.android.gms.dynamite.zza.run(com.google.android.gms:play-services-basement@@18.1.0:2)
+	  - locked <0x1214> (a com.google.android.gms.dynamite.zza)
+
+"TokenRefresher@5342" prio=5 tid=0x152 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	  at android.os.MessageQueue.nativePollOnce(MessageQueue.java:-1)
+	  at android.os.MessageQueue.next(MessageQueue.java:323)
+	  at android.os.Looper.loop(Looper.java:136)
+	  at android.os.HandlerThread.run(HandlerThread.java:61)
+
+"GoogleApiHandler@5596" prio=5 tid=0x155 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	  at android.os.MessageQueue.nativePollOnce(MessageQueue.java:-1)
+	  at android.os.MessageQueue.next(MessageQueue.java:323)
+	  at android.os.Looper.loop(Looper.java:136)
+	  at android.os.HandlerThread.run(HandlerThread.java:61)
+
+"HeapTaskDaemon@6071" daemon prio=5 tid=0x141 nid=NA waiting for monitor entry
+  java.lang.Thread.State: BLOCKED
+	  at dalvik.system.VMRuntime.runHeapTasks(VMRuntime.java:-1)
+	  at java.lang.Daemons$HeapTaskDaemon.run(Daemons.java:433)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Measurement Worker@4857" prio=5 tid=0x14a nid=NA waiting
+  java.lang.Thread.State: WAITING
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Object.wait(Object.java:407)
+	  at com.google.android.gms.measurement.internal.zzfz.run(com.google.android.gms:play-services-measurement-impl@@21.3.0:10)
+
+"FinalizerWatchdogDaemon@6073" daemon prio=5 tid=0x140 nid=NA sleeping
+  java.lang.Thread.State: TIMED_WAITING
+	 blocks FinalizerWatchdogDaemon@6073
+	  at java.lang.Thread.sleep(Thread.java:-1)
+	  at java.lang.Thread.sleep(Thread.java:371)
+	  - locked <0x17bd> (a java.lang.Object)
+	  at java.lang.Thread.sleep(Thread.java:313)
+	  at java.lang.Daemons$FinalizerWatchdogDaemon.sleepFor(Daemons.java:314)
+	  at java.lang.Daemons$FinalizerWatchdogDaemon.waitForFinalization(Daemons.java:336)
+	  at java.lang.Daemons$FinalizerWatchdogDaemon.run(Daemons.java:253)
+	  at java.lang.Thread.run(Thread.java:761)
+
+"Signal Catcher@6070" daemon prio=5 tid=0x13c nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 Incompatible thread state: thread not suspended
+
+"Binder:7470_1@6075" prio=5 tid=0x142 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
+"Binder:7470_2@5953" prio=5 tid=0x143 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
+"Profile Saver@4347" daemon prio=5 tid=0x144 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
+"RenderThread@5502" prio=5 tid=0x154 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
+"hwuiTask1@5876" prio=5 tid=0x156 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
+"hwuiTask2@5877" prio=5 tid=0x157 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
+"Binder:7470_3@5984" prio=5 tid=0x15b nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	 Incompatible thread state: thread not suspended
+
