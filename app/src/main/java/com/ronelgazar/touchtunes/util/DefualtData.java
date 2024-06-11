@@ -31,7 +31,8 @@ public class DefualtData {
     {
         Map<String, Object> settings = new HashMap<>();
         settings.put("interaction_type", "slow");
-        settings.put("vibration", 5);
+        settings.put("vibration_intensity", 5);
+        settings.put("vibration", 10);
         settings.put("interaction_duration", 5);
         settings.put("lighting", 5);
         settings.put("session_duration", "53:00");

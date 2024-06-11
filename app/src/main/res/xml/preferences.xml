@@ -4,20 +4,20 @@
     android:background="@color/white">
 
     <androidx.preference.PreferenceCategory
-        app:title="Settings">
+        app:title="הגדרות">
 
         <!-- Interaction Duration -->
         <androidx.preference.EditTextPreference
             android:key="interaction_duration"
-            android:title="Interaction Duration (minutes)"
-            android:summary="Set the interaction duration"
+            android:title="משך זמן אינטראקציה (בדקות)"
+            android:summary="קבע את משך הזמן של האינטראקציה"
             />
 
         <!-- Interaction Type -->
         <androidx.preference.ListPreference
             android:key="interaction_type"
-            android:title="Interaction Type"
-            android:summary="Choose the interaction mode"
+            android:title="סוג אינטראקציה"
+            android:summary="בחר את מצב האינטראקציה"
             android:entries="@array/interaction_type_entries"
             android:entryValues="@array/interaction_type_values"
             />
@@ -25,29 +25,31 @@
         <!-- Session Duration -->
         <androidx.preference.EditTextPreference
             android:key="session_duration"
-            android:title="Session Duration (minutes)"
-            android:summary="Set the session duration"
+            android:title="משך זמן סשן (בדקות)"
+            android:summary="קבע את משך הזמן של הסשן"
             />
 
         <!-- Sound Interaction -->
         <androidx.preference.SwitchPreferenceCompat
             android:key="sound_interaction"
-            android:title="Sound Interaction"
-            android:summary="Enable sound feedback for interactions"
+            android:title="פידבק קולי"
+            android:summary="אפשר פידבק קולי לאינטראקציות"
             />
 
         <!-- Vibration Intensity -->
         <androidx.preference.EditTextPreference
             android:key="vibration"
-            android:title="Vibration Intensity"
-            android:summary="Set the vibration intensity (0 = off, 100 = full)"
+            android:title="עוצמת הרטט"
+            android:summary="קבע את עוצמת הרטט (0 = כבוי, 100 = מלא)"
             />
 
+        <!-- Lighting -->
         <androidx.preference.EditTextPreference
             android:key="lighting"
-            android:title="Lighting"
-            android:summary="Set the lighting level"
+            android:title="רמת תאורה"
+            android:summary="קבע את רמת התאורה"
             />
+
         <!-- Add more preferences as needed -->
 
     </androidx.preference.PreferenceCategory>
