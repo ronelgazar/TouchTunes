@@ -138,7 +138,7 @@ public class Patient implements Parcelable {
     }
 
     public Mode getMode() {
-        return mode;
+        return this.mode;
     }
 
     public void setMode(Mode mode) {

@@ -47,6 +47,9 @@ public class Song implements Parcelable  {
     public Song(String title, String url) {
         this.title = title;
         this.url = url;
+
+
+
     }
 
     public String getTitle() {
@@ -60,6 +63,7 @@ public class Song implements Parcelable  {
     public String getUrl() {
         return url;
     }
+
 
     public void setUrl(String url) {
         this.url = url;
