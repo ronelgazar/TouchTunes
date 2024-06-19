@@ -2,6 +2,9 @@ package com.ronelgazar.touchtunes.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -19,12 +22,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import android.util.Base64;
-import com.google.gson.Gson;
 
 public class Playlist implements Parcelable {
     private List<Song> playList;
     private static final String PREFS_NAME = "com.ronelgazar.touchtunes";
     private static final String PLAYLIST_KEY = "playlist";
+    private static final long MAX_SIZE = 18 * 1024 * 1024; // 18 MB in bytes
+
     protected Playlist(Parcel in) {
         playList = in.createTypedArrayList(Song.CREATOR);
     }
@@ -62,7 +66,6 @@ public class Playlist implements Parcelable {
     public Playlist(List<Song> playList) {
         this.playList = playList;
     }
-
 
     public Playlist(Map<String, Object> playlist) {
         List<Song> songs = new ArrayList<>();
@@ -168,8 +171,6 @@ public class Playlist implements Parcelable {
         return connection.getInputStream();
     }
 
-
-
     public void savePlaylistToSharedPrefs(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -183,43 +184,47 @@ public class Playlist implements Parcelable {
                 public void run() {
                     try {
                         InputStream songStream = getStreamFromUrl(song.getUrl());
-                        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                        int nRead;
-                        byte[] data = new byte[1024];
-                        while ((nRead = songStream.read(data, 0, data.length)) != -1) {
-                            buffer.write(data, 0, nRead);
+                        File songFile = new File(context.getFilesDir(), "song_" + finalI + ".mp3");
+                        try (FileOutputStream fos = new FileOutputStream(songFile)) {
+                            byte[] buffer = new byte[1024];
+                            int nRead;
+                            while ((nRead = songStream.read(buffer)) != -1) {
+                                fos.write(buffer, 0, nRead);
+                            }
                         }
-                        buffer.flush();
-                        byte[] songData = buffer.toByteArray();
-
-                        // Check if the size of the song data is too large before logging
-                        if (songData.length <= 2000) { // Adjust this value as needed
-                            Log.e("BASE64SONGS", Arrays.toString(songData));
-                            String songDataAsBase64 = Base64.encodeToString(songData, Base64.DEFAULT);
-                            editor.putString(PLAYLIST_KEY + "_song_" + finalI, songDataAsBase64);
-                            editor.apply();
-                        } else {
-                            Log.e("BASE64SONGS", "Song data is too large to log");
-                        }
-
-
+                        editor.putString(PLAYLIST_KEY + "_song_file_" + finalI, songFile.getAbsolutePath());
+                        editor.apply();
                     } catch (Exception e) {
                         Log.e("Playlist", "Error saving song data", e);
                     }
                 }
-
-
             });
-        }}
+        }
+    }
 
-                public InputStream decodeSongData(Context context, int songIndex) {
-                    SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                    String songDataAsBase64 = sharedPreferences.getString(PLAYLIST_KEY + "_song_" + songIndex, null);
-                    if (songDataAsBase64 != null) {
-                        byte[] songData = Base64.decode(songDataAsBase64, Base64.DEFAULT);
-                        return new ByteArrayInputStream(songData);
-                    } else {
-                        return null;
-                    }
+
+
+    public InputStream decodeSongData(Context context, int songIndex) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String songDataAsBase64 = sharedPreferences.getString(PLAYLIST_KEY + "_song_" + songIndex, null);
+        String songFilePath = sharedPreferences.getString(PLAYLIST_KEY + "_song_file_" + songIndex, null);
+
+        if (songDataAsBase64 != null) {
+            byte[] songData = Base64.decode(songDataAsBase64, Base64.DEFAULT);
+            return new ByteArrayInputStream(songData);
+        } else if (songFilePath != null) {
+            try {
+                File songFile = new File(songFilePath);
+                byte[] songData = new byte[(int) songFile.length()];
+                try (FileInputStream fis = new FileInputStream(songFile)) {
+                    fis.read(songData);
                 }
+                return new ByteArrayInputStream(songData);
+            } catch (Exception e) {
+                Log.e("Playlist", "Error reading song file", e);
             }
+        }
+        return null;
+    }
+
+}
