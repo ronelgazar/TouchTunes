@@ -68,15 +68,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-            getWindow().setAttributes(params);
-            new Handler().postDelayed(() -> {
+            if (patient.getMode().getLightingSettings().equals("0")) {
+                params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+            } else {
                 params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
-                getWindow().setAttributes(params);
-            }, 500L * ((int)(Double.parseDouble(patient.getMode().getLightingSettings())))); // Flash for 100 milliseconds
+            }
+            getWindow().setAttributes(params);
+
+            if (!patient.getMode().getLightingSettings().equals("0")) {
+                new Handler().postDelayed(() -> {
+                    params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
+                    getWindow().setAttributes(params);
+                }, 500L * ((int) (Double.parseDouble(patient.getMode().getLightingSettings())))); // Flash for 100 milliseconds
+            }
+
             // Schedule the next flash
             scheduleNextFlash();
         }
+
     };
 
     private final Handler settingsUpdateHandler = new Handler();
@@ -176,10 +185,17 @@ public class MainActivity extends AppCompatActivity {
         // Start vibrating the screen every 5 seconds
         new Handler().postDelayed(() -> {
             if (vibrator != null && vibrator.hasVibrator()) {
-                long[] vibrationPattern = {0, 500L * ((int)(Double.parseDouble(patient.getMode().getVibrationIntensity())))/4, 500L * ((int)(Double.parseDouble(patient.getMode().getVibrationIntensity())))/2, 500L * ((int)(Double.parseDouble(patient.getMode().getVibrationIntensity())))/4}; // Pattern: 0ms off, 500ms on, 100ms off, 500ms on
-                vibrator.vibrate(vibrationPattern, 0); // Repeat indefinitely
+                if (patient.getMode().getVibrationIntensity().equals("0")) {
+                    // Turn off vibrations
+                    vibrator.cancel();
+                } else {
+                    // Calculate the vibration pattern based on intensity
+                    long[] vibrationPattern = {0, 500L * ((int) (Double.parseDouble(patient.getMode().getVibrationIntensity()))) / 4, 500L * ((int) (Double.parseDouble(patient.getMode().getVibrationIntensity()))) / 2, 500L * ((int) (Double.parseDouble(patient.getMode().getVibrationIntensity()))) / 4}; // Pattern: 0ms off, 500ms on, 100ms off, 500ms on
+                    vibrator.vibrate(vibrationPattern, 0); // Repeat indefinitely
+                }
             }
         }, 5000); // Start after 5 seconds
+
 
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
